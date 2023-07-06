@@ -19,6 +19,7 @@
 			"extensions": [
 				"ms-python.python",
 				"ms-python.black-formatter",
+				"ms-python.flake8",
 				"bungcip.better-toml"
 			]
 		}
