@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "honeypot"
+version = "0.1.0"
+description = "Source code for the honeypot images"
+authors = ["Grunet"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+flake8 = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
