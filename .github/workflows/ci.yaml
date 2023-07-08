@@ -9,9 +9,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+        # Adapted from https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#caching-packages
+      - name: Install poetry
+        run: | 
+          pipx install poetry==1.5.1
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11.4'
+          cache: 'poetry'
+      - run: | 
+          poetry install
 
       - name: Check Formatting
         run: |
