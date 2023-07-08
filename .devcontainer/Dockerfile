@@ -2,6 +2,7 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 
 RUN apt-get update
 RUN apt-get install -y python3.11
+# This may break ubuntu system packages that are depending on "python" to be of a specific version (e.g. Python 2). For now it seems fine
 RUN ln -s /usr/bin/python3.11 /usr/bin/python
 
 RUN wget -O poetryInstallScript.py https://install.python-poetry.org
