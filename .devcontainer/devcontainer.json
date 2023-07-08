@@ -12,16 +12,26 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "pip3 install --user -r requirements.txt",
+	"postCreateCommand": "cd packages/honeypot && poetry install",
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"extensions": [
 				"ms-python.python",
+				"ms-vscode.makefile-tools",
 				"ms-python.black-formatter",
 				"ms-python.flake8",
-				"bungcip.better-toml"
-			]
+				"bungcip.better-toml",
+				"redhat.vscode-yaml"
+			],
+			"settings": {
+				"editor.formatOnSave": true,
+				"python.formatting.provider": "none",
+				"[python]": {
+					"editor.defaultFormatter": "ms-python.black-formatter",
+					"editor.formatOnSave": true
+				}
+			}
 		}
 	},
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
