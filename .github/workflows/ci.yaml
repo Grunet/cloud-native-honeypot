@@ -1,0 +1,18 @@
+name: CI
+on: [push]
+jobs:
+  honeypot:
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: packages/honeypot/
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check Formatting
+        run: |
+          make check-format
+
+      - name: Lint
+        run: |
+          make lint

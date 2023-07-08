@@ -21,7 +21,8 @@
 				"ms-vscode.makefile-tools",
 				"ms-python.black-formatter",
 				"ms-python.flake8",
-				"bungcip.better-toml"
+				"bungcip.better-toml",
+				"redhat.vscode-yaml"
 			],
 			"settings": {
 				"editor.formatOnSave": true,
