@@ -27,3 +27,7 @@ jobs:
       - name: Lint
         run: |
           make lint
+
+      - name: Static Analysis - Pyre
+        run: |
+          make static-analysis-pyre
