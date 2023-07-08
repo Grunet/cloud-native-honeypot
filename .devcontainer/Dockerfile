@@ -6,4 +6,4 @@ RUN wget -O poetryInstallScript.py https://install.python-poetry.org
 RUN POETRY_VERSION=1.5.1 POETRY_HOME=/home/vscode/.local/ python poetryInstallScript.py # Poetry relies on $HOME which is /root/ during image build. POETRY_HOME overrides this
 
 RUN apk add podman=~4.5.1
-RUN wget https://github.com/earthly/earthly/releases/download/v0.7.11/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly && /usr/local/bin/earthly bootstrap --with-autocomplete
+RUN sudo wget https://github.com/earthly/earthly/releases/download/v0.7.11/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly && /usr/local/bin/earthly bootstrap --with-autocomplete
