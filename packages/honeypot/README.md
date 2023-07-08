@@ -1,1 +1,1 @@
-TODO
+podman doesn't work rootless so any commands with it or Earthly have to use "sudo" to run as root
