@@ -9,7 +9,8 @@
 	},
 	"runArgs": [
 		"--security-opt",
-		"seccomp=unconfined"
+		"seccomp=unconfined",
+		"--privileged"
 	], // Needed for podman to function
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
