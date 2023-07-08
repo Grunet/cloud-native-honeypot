@@ -18,6 +18,7 @@
 		"vscode": {
 			"extensions": [
 				"ms-python.python",
+				"earthly.earthfile-syntax-highlighting",
 				"ms-python.black-formatter",
 				"ms-python.flake8",
 				"bungcip.better-toml"
