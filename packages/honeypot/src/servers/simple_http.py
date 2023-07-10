@@ -12,7 +12,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
 
 class SimpleHttpServerAdapter(ServerAdapterProtocol):
-    def init(self) -> None:
+    def __init__(self) -> None:
         self.__httpServer: HTTPServer | None = None
 
     def start(self) -> None:
