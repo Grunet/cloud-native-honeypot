@@ -1,5 +1,4 @@
 import signal
-import sys
 
 from servers import simple_http
 from servers.server_adapter_protocol import ServerAdapterProtocol
