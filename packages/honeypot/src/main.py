@@ -20,5 +20,7 @@ if __name__ == "__main__":
         for serverAdapter in serverAdapters:
             serverAdapter.stop()
 
+        sys.exit(0)
+
     signal.signal(signal.SIGINT, terminationHandler)
     signal.signal(signal.SIGTERM, terminationHandler)
