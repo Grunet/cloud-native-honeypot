@@ -6,3 +6,5 @@ static-analysis-pyre:
 	poetry run pyre --noninteractive check
 static-analysis-mypy:
 	poetry run mypy --strict .
+start-server-simple-http:
+	ENABLE_SIMPLE_HTTP=true python ./src/main.py
