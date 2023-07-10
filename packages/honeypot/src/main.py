@@ -1,5 +1,9 @@
+import signal
+import sys
+
 from servers import simple_http
 from servers.server_adapter_protocol import ServerAdapterProtocol
+
 
 if __name__ == "__main__":
     serverAdapters: list[ServerAdapterProtocol] = []
@@ -12,5 +16,9 @@ if __name__ == "__main__":
     for serverAdapter in serverAdapters:
         serverAdapter.start()
 
-    # TODO - add keyboard interrupt handling
-    # TODO - add SIGTERM handling
+    def terminationHandler():
+        for serverAdapter in serverAdapters:
+            serverAdapter.stop()
+
+    signal.signal(signal.SIGINT, terminationHandler)
+    signal.signal(signal.SIGTERM, terminationHandler)
