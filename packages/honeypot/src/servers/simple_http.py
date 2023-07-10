@@ -1,6 +1,7 @@
 from .server_adapter_protocol import ServerAdapterProtocol
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from threading import Thread
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -23,8 +24,17 @@ class SimpleHttpServerAdapter(ServerAdapterProtocol):
     def stop(self):
         print("Stopping simple HTTP server")
 
-        if self.__httpServer:
-            self.__httpServer.shutdown()
+        def stop_in_separate_thread(httpServer: HTTPServer | None):
+            if httpServer:
+                # httpServer.__shutdown_request = True
+                # TODO - figure out why this is still blocking/deadlocking the main thread
+                httpServer.shutdown()
+
+        thread = Thread(target=stop_in_separate_thread, args=(self.__httpServer,))
+        thread.start()
+        thread.join()
+
+        print("SOS")
 
 
 def createServerAdapter() -> ServerAdapterProtocol:
