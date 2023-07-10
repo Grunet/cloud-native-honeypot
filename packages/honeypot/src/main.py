@@ -8,6 +8,16 @@ from servers.server_adapter_protocol import ServerAdapterProtocol
 if __name__ == "__main__":
     serverAdapters: list[ServerAdapterProtocol] = []
 
+    def terminationHandler(sig, frame):
+        for serverAdapter in serverAdapters:
+            serverAdapter.stop()
+
+        print("Exiting the process")
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, terminationHandler)
+    signal.signal(signal.SIGTERM, terminationHandler)
+
     # TODO - use an environment variable here instead
     if True:
         sa = simple_http.createServerAdapter()
@@ -15,12 +25,3 @@ if __name__ == "__main__":
 
     for serverAdapter in serverAdapters:
         serverAdapter.start()
-
-    def terminationHandler():
-        for serverAdapter in serverAdapters:
-            serverAdapter.stop()
-
-        sys.exit(0)
-
-    signal.signal(signal.SIGINT, terminationHandler)
-    signal.signal(signal.SIGTERM, terminationHandler)
