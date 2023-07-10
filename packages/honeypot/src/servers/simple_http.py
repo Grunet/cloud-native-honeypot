@@ -34,8 +34,6 @@ class SimpleHttpServerAdapter(ServerAdapterProtocol):
         thread.start()
         thread.join()
 
-        print("SOS")
-
 
 def createServerAdapter() -> ServerAdapterProtocol:
     return SimpleHttpServerAdapter()
