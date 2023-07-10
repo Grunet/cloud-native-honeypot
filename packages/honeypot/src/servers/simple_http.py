@@ -1,7 +1,7 @@
-from . import server_adapter_protocol
+from .server_adapter_protocol import ServerAdapterProtocol
 
 
-class SimpleHttpServerAdapter(server_adapter_protocol.ServerAdapterProtocol):
+class SimpleHttpServerAdapter(ServerAdapterProtocol):
     def start(self):
         print("start")
         pass
@@ -11,5 +11,5 @@ class SimpleHttpServerAdapter(server_adapter_protocol.ServerAdapterProtocol):
         pass
 
 
-def createServerAdapter() -> server_adapter_protocol.ServerAdapterProtocol:
+def createServerAdapter() -> ServerAdapterProtocol:
     return SimpleHttpServerAdapter()
