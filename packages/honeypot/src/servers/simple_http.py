@@ -19,7 +19,13 @@ class SimpleHttpServerAdapter(ServerAdapterProtocol):
         print("Starting simple HTTP server on port 8000")
 
         self.__httpServer = HTTPServer(("localhost", 8000), SimpleHTTPRequestHandler)
-        self.__httpServer.serve_forever()
+
+        def start_in_separate_thread(httpServer: HTTPServer | None):
+            if httpServer:
+                httpServer.serve_forever()
+
+        thread = Thread(target=start_in_separate_thread, args=(self.__httpServer,))
+        thread.start()
 
     def stop(self):
         print("Stopping simple HTTP server")

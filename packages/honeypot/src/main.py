@@ -9,11 +9,12 @@ if __name__ == "__main__":
     serverAdapters: list[ServerAdapterProtocol] = []
 
     def terminationHandler(sig, frame):
+        print(sig)
+
         for serverAdapter in serverAdapters:
             serverAdapter.stop()
 
         print("Exiting the process")
-        sys.exit(0)
 
     signal.signal(signal.SIGINT, terminationHandler)
     signal.signal(signal.SIGTERM, terminationHandler)
