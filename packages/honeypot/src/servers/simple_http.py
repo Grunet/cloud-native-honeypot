@@ -32,8 +32,6 @@ class SimpleHttpServerAdapter(ServerAdapterProtocol):
 
         def stop_in_separate_thread(httpServer: HTTPServer | None):
             if httpServer:
-                # httpServer.__shutdown_request = True
-                # TODO - figure out why this is still blocking/deadlocking the main thread
                 httpServer.shutdown()
 
         thread = Thread(target=stop_in_separate_thread, args=(self.__httpServer,))
