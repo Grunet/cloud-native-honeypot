@@ -5,32 +5,32 @@ from threading import Thread
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
+    def do_GET(self) -> None:
         self.send_response(200)
         self.end_headers()
         self.wfile.write(b"Hello, World!")
 
 
 class SimpleHttpServerAdapter(ServerAdapterProtocol):
-    def init(self):
+    def init(self) -> None:
         self.__httpServer: HTTPServer | None = None
 
-    def start(self):
+    def start(self) -> None:
         print("Starting simple HTTP server on port 8000")
 
         self.__httpServer = HTTPServer(("localhost", 8000), SimpleHTTPRequestHandler)
 
-        def start_in_separate_thread(httpServer: HTTPServer | None):
+        def start_in_separate_thread(httpServer: HTTPServer | None) -> None:
             if httpServer:
                 httpServer.serve_forever()
 
         thread = Thread(target=start_in_separate_thread, args=(self.__httpServer,))
         thread.start()
 
-    def stop(self):
+    def stop(self) -> None:
         print("Stopping simple HTTP server")
 
-        def stop_in_separate_thread(httpServer: HTTPServer | None):
+        def stop_in_separate_thread(httpServer: HTTPServer | None) -> None:
             if httpServer:
                 httpServer.shutdown()
 

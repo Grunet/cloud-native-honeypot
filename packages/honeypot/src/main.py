@@ -1,5 +1,6 @@
 import signal
 import os
+from typing import Any
 
 from servers import simple_http
 from servers.server_adapter_protocol import ServerAdapterProtocol
@@ -21,7 +22,7 @@ def isServerEnabled(serverName: str) -> bool:
 if __name__ == "__main__":
     serverAdapters: list[ServerAdapterProtocol] = []
 
-    def terminationHandler(sig, frame):
+    def terminationHandler(sig: int, frame: Any) -> None:
         for serverAdapter in serverAdapters:
             serverAdapter.stop()
 
