@@ -14,7 +14,7 @@ class TestSimpleHttpServerAdapter(unittest.TestCase):
 
     def test_GET_returns_200(self) -> None:
         # Arrange
-        conn = http.client.HTTPConnection("127.0.0.1:8000")
+        conn = http.client.HTTPConnection("127.0.0.1", 8000)
 
         # Act
         conn.request("GET", "/")
