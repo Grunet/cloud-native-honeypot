@@ -35,3 +35,7 @@ jobs:
       - name: Static Analysis - mypy
         run: |
           make static-analysis-mypy
+
+      - name: Unit Tests
+        run: |
+          make test-unit
