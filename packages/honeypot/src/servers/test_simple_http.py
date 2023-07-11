@@ -22,7 +22,7 @@ class TestSimpleHttpServerAdapter(unittest.TestCase):
         # Assert
         response = conn.getresponse()
         statusCode = response.getcode()
-        conn.close()
+        conn.close()  # unittest reports an unclosed socket even with this
 
         self.assertEqual(statusCode, 200)
 
