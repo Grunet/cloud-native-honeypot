@@ -5,14 +5,14 @@ import http.client
 
 
 class TestSimpleHttpServerAdapter(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.__serverAdapter = createServerAdapter()
         self.__serverAdapter.start()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.__serverAdapter.stop()
 
-    def test_GET_returns_200(self):
+    def test_GET_returns_200(self) -> None:
         # Arrange
         conn = http.client.HTTPConnection("127.0.0.1:8000")
 
