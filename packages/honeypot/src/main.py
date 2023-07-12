@@ -5,7 +5,7 @@ from typing import Any
 from servers import simple_http
 from servers.server_adapter_protocol import ServerAdapterProtocol
 
-serverNameToEnvVarDict = {"simple_http": "ENABLE_SIMPLE_HTTP"}
+serverNameToEnvVarDict = {"simple_http": "ENABLE_SERVER_SIMPLE_HTTP"}
 
 
 def isServerEnabled(serverName: str) -> bool:

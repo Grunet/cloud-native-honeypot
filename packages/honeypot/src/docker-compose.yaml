@@ -3,6 +3,6 @@ services:
   simple_http:
     build: .
     environment:
-      - ENABLE_SIMPLE_HTTP=true
+      - ENABLE_SERVER_SIMPLE_HTTP=true
     ports:
       - "8000:8000"
