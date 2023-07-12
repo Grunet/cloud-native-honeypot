@@ -10,3 +10,5 @@ test-unit:
 	python -m unittest discover -s ./src/
 start-server-simple-http:
 	ENABLE_SIMPLE_HTTP=true python ./src/main.py
+start-docker-simple-http:
+	cd ./src/ && docker compose up
