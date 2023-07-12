@@ -6,7 +6,7 @@ WORKDIR /honeypot-working-dir
 
 COPY . .
 
-# TODO - install Poetry production dependencies
+# TODO - install Poetry production dependencies via a multistage-build using the dev version of the image
 
 # TODO - check if this still handles signals correctly
 ENTRYPOINT [ "python", "main.py"]
