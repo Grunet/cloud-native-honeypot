@@ -12,3 +12,5 @@ start-server-simple-http:
 	ENABLE_SERVER_SIMPLE_HTTP=true python ./src/main.py
 start-docker-simple-http:
 	cd ./src/ && docker compose up --build
+stop-docker-simple-http:
+	cd ./src/ && docker compose down

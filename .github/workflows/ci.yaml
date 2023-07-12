@@ -39,3 +39,11 @@ jobs:
       - name: Unit Tests
         run: |
           make test-unit
+
+      - name: Smoke Tests - Server Startup
+        run: |
+          make start-docker-simple-http
+
+      - name: Smoke Tests - Server Shutdown
+        run: |
+          make stop-docker-simple-http
