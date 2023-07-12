@@ -40,6 +40,10 @@ jobs:
         run: |
           make test-unit
 
+      - name: Check Docker Version
+        run: |
+          docker --version
+
       - name: Smoke Tests - Server Startup
         run: |
           make start-docker-simple-http
