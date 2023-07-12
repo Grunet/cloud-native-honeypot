@@ -39,3 +39,18 @@ jobs:
       - name: Unit Tests
         run: |
           make test-unit
+
+      - name: Check Docker Version
+        # Make sure the version of Docker doesn't unexpectedly change and doesn't drift much from what's used in Codespaces
+        # If this change looks legitimate (i.e. Github updating the vendored version, or coming after a change to the runner OS version) update the hard-coded version below
+        run: |
+          docker --version
+          docker --version | grep "Docker version 20.10.25+azure-2"
+
+      - name: Smoke Tests - Server Startup
+        run: |
+          make start-docker-simple-http
+
+      - name: Smoke Tests - Server Shutdown
+        run: |
+          make stop-docker-simple-http
