@@ -75,7 +75,7 @@ jobs:
           push: true
           tags: |
             ${{ steps.meta.outputs.tags }}
-            v${{ steps.get-version.outputs.releaseVersion }}
+            ${{ env.REGISTRY}}/${{ env.IMAGE_NAME }}:v${{ steps.get-version.outputs.releaseVersion }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
