@@ -12,6 +12,11 @@ What is in scope for breaking changes includes
 
 ## Changes
 
+### v0.2.3
+
+- Try fix an issue with cosign prompting in the release workflow
+- Update URL in the Github Release to point directly to the container image in Github Packages
+
 ### v0.2.2
 
 - Try fix another issue with the casing of the docker tag in the release workflow
