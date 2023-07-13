@@ -12,9 +12,13 @@ What is in scope for breaking changes includes
 
 ## Changes
 
+### v0.2.1
+
+- Try fix issue with docker tag in release workflow
+
 ### v0.2.0
 
-- Create a release pipeline for the docker image in Github Actions
+- Create a release workflow for the docker image in Github Actions
 
 ### v0.1.0
 
