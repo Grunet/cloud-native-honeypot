@@ -1,0 +1,26 @@
+name: Release Honeypot
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Get version
+        id: get-version
+        working-directory: packages/honeypot
+        run: |
+          version=$(cat version.json | jq --raw-output .version)
+
+          echo "releaseVersion=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Release
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v0.1.15
+        with:
+          name: honeypot-v${{ steps.get-version.outputs.releaseVersion }}
+          tag_name: honeypot-v${{ steps.get-version.outputs.releaseVersion }}
+          body: The new container image can be found at https://github.com/Grunet?tab=packages&repo_name=cloud-native-honeypot&ecosystem=container
