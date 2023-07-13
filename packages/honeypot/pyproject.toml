@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "honeypot"
-version = "0.0.0" # Tracked in version.json instead
+version = "0.0.0" # Tracked in version.json instead (it's easier to extract from there)
 description = "Source code for the honeypot images"
 authors = ["Grunet"]
 license = "MIT"
