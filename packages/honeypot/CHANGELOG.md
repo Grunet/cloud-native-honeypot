@@ -12,6 +12,10 @@ What is in scope for breaking changes includes
 
 ## Changes
 
+### v0.2.0
+
+- Create a release pipeline for the docker image in Github Actions
+
 ### v0.1.0
 
 - Created a simple http server in a docker image behind a ENABLE_SERVER_SIMPLE_HTTP environment variable
