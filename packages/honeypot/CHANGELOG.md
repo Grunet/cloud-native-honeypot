@@ -12,6 +12,10 @@ What is in scope for breaking changes includes
 
 ## Changes
 
+### v0.2.2
+
+- Try fix another issue with the casing of the docker tag in the release workflow
+
 ### v0.2.1
 
 - Try fix issue with docker tag in release workflow
