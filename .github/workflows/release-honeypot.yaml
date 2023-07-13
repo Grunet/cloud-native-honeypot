@@ -35,7 +35,7 @@ jobs:
         with:
           name: honeypot-v${{ steps.get-version.outputs.releaseVersion }}
           tag_name: honeypot-v${{ steps.get-version.outputs.releaseVersion }}
-          body: The new container image can be found at https://github.com/Grunet?tab=packages&repo_name=cloud-native-honeypot&ecosystem=container
+          body: The new container image can be found at https://github.com/Grunet/cloud-native-honeypot/pkgs/container/cloud-native-honeypot
 
       # Install the cosign tool
       # https://github.com/sigstore/cosign-installer
