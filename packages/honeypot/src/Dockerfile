@@ -1,4 +1,5 @@
-FROM cgr.dev/chainguard/python:3.11.4
+# Python 3.11.4 See https://www.chainguard.dev/unchained/a-guide-on-how-to-use-chainguard-images-for-public-catalog-tier-users for more details on how to update this
+FROM cgr.dev/chainguard/python@sha256:bbaba40f4dfff902af5ec49793a8d42478cae07ad9fcd6eace93a55c348a2aa6 
 
 WORKDIR /honeypot-working-dir
 
