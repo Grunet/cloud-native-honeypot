@@ -14,14 +14,17 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         if self.__eventClient:
-            self.__eventClient.sendEvent(
-                {
-                    "server": "simple_http",
-                    "requestMethod": "GET",
-                    "clientIp": self.client_address[0],
-                    "userAgent": self.headers.get("User-Agent"),
-                }
-            )
+            try:
+                self.__eventClient.sendEvent(
+                    {
+                        "server": "simple_http",
+                        "requestMethod": "GET",
+                        "clientIp": self.client_address[0],
+                        "userAgent": self.headers.get("User-Agent"),
+                    }
+                )
+            except Exception as ex:
+                print(ex)
 
         self.send_response(200)
         self.end_headers()

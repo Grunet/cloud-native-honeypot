@@ -25,9 +25,12 @@ class EventbridgeClientAdapter(EventClientAdapterProtocol):
         )
 
         if response["FailedEntryCount"] == 0:
-            print("Event published successfully.")
+            print("Eventbridge event published successfully.")
         else:
-            print(f"Failed to publish {response['FailedEntryCount']} event(s).")
+            print(
+                f"""Failed to publish {response['FailedEntryCount']} event(s) to
+                     Eventbridge."""
+            )
 
 
 @dataclass
