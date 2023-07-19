@@ -1,4 +1,5 @@
 from .server_adapter_protocol import ServerAdapterProtocol
+from eventClients.event_client_adapter_protocol import EventClientAdapterProtocol
 
 from dataclasses import dataclass
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -7,8 +8,7 @@ from threading import Thread
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def __init__(self, request, client_address, server):
-        # TODO - type this better
-        self.__eventClient = server.eventClient
+        self.__eventClient: EventClientAdapterProtocol | None = server.eventClient
 
         super().__init__(request, client_address, server)
 
@@ -61,8 +61,7 @@ class SimpleHttpServerAdapter(ServerAdapterProtocol):
 
 @dataclass
 class ServerAdapterInputs:
-    # TODO - type this better
-    eventClient: object
+    eventClient: EventClientAdapterProtocol | None
 
 
 def createServerAdapter(inputs: ServerAdapterInputs) -> ServerAdapterProtocol:
