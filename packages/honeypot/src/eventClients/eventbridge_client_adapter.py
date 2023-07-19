@@ -5,12 +5,6 @@ import boto3
 from dataclasses import dataclass
 import json
 
-
-@dataclass
-class EventbridgeClientAdapterInputs:
-    eventBusNameOrArn: str
-
-
 class EventbridgeClientAdapter(EventClientAdapterProtocol):
     def __init__(self, **kwargs) -> None:
         self.__eventBusNameOrArn = kwargs.get("eventBusNameOrArn")
@@ -34,6 +28,9 @@ class EventbridgeClientAdapter(EventClientAdapterProtocol):
         else:
             print(f"Failed to publish {response['FailedEntryCount']} event(s).")
 
+@dataclass
+class EventbridgeClientAdapterInputs:
+    eventBusNameOrArn: str
 
 def createEventClientAdapter(
     inputs: EventbridgeClientAdapterInputs,
