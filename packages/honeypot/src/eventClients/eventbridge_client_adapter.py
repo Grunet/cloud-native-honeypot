@@ -2,11 +2,19 @@ from .event_client_adapter_protocol import EventClientAdapterProtocol
 
 import boto3
 
+from dataclasses import dataclass
 import json
 
 
+@dataclass
+class EventbridgeClientAdapterInputs:
+    eventBusNameOrArn: str
+
+
 class EventbridgeClientAdapter(EventClientAdapterProtocol):
-    def __init__(self) -> None:
+    def __init__(self, **kwargs) -> None:
+        self.__eventBusNameOrArn = kwargs.get("eventBusNameOrArn")
+
         self.__eventbridgeClient = boto3.client("events")
 
     def sendEvent(self, eventDetails: object) -> None:
@@ -16,7 +24,7 @@ class EventbridgeClientAdapter(EventClientAdapterProtocol):
                     "Source": "cloud-native-honeypot",
                     "DetailType": "cloudNativeHoneypotTriggered",
                     "Detail": json.dumps(eventDetails),
-                    "EventBusName": "default",
+                    "EventBusName": self.__eventBusNameOrArn,
                 }
             ]
         )
@@ -27,5 +35,11 @@ class EventbridgeClientAdapter(EventClientAdapterProtocol):
             print(f"Failed to publish {response['FailedEntryCount']} event(s).")
 
 
-def createEventClientAdapter() -> EventClientAdapterProtocol:
-    return EventbridgeClientAdapter()
+def createEventClientAdapter(
+    inputs: EventbridgeClientAdapterInputs,
+) -> EventClientAdapterProtocol:
+    eventBusNameOrArn = inputs.eventBusNameOrArn
+    if not eventBusNameOrArn:
+        raise ValueError("eventBusNameOrArn must be a non-empty string")
+
+    return EventbridgeClientAdapter(eventBusNameOrArn=eventBusNameOrArn)
