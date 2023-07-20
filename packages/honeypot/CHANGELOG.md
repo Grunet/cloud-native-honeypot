@@ -9,6 +9,7 @@ What is in scope for breaking changes includes
 - Environment variables for the docker image
 - Ports exposed by the docker image
 - Container healthcheck routes exposed by the docker image
+- Metadata and details of published events
 
 ## Changes
 
