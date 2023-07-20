@@ -7,7 +7,7 @@ static-analysis-pyre:
 static-analysis-mypy:
 	poetry run mypy --strict .
 test-unit:
-	python -m unittest discover -s ./src/
+	poetry run python -m unittest discover -s ./src/
 start-server-simple-http:
 	ENABLE_SERVER_SIMPLE_HTTP=true poetry run python ./src/main.py
 start-docker-simple-http:
