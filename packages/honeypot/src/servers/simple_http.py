@@ -45,7 +45,7 @@ class SimpleHttpServerAdapter(ServerAdapterProtocol):
         # Only clear way to inject the client into request handling
         # is by appending it onto the server object
         # and reading it later on
-        self.__httpServer.eventClient = self.__eventClient  # pyre-ignore[16]
+        self.__httpServer.eventClient = self.__eventClient  # type: ignore[attr-defined]
 
         def start_in_separate_thread(httpServer: HTTPServer | None) -> None:
             if httpServer:
