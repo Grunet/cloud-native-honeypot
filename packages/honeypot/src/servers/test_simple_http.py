@@ -1,4 +1,4 @@
-from .simple_http import createServerAdapter
+from .simple_http import createServerAdapter, ServerAdapterInputs
 
 import unittest
 import http.client
@@ -6,7 +6,9 @@ import http.client
 
 class TestSimpleHttpServerAdapter(unittest.TestCase):
     def setUp(self) -> None:
-        self.__serverAdapter = createServerAdapter()
+        self.__serverAdapter = createServerAdapter(
+            ServerAdapterInputs(eventClient=None)
+        )
         self.__serverAdapter.start()
 
     def tearDown(self) -> None:
