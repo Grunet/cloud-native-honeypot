@@ -16,6 +16,7 @@ black = "^23.3.0"
 flake8 = "^6.0.0"
 pyre-check = "^0.9.18"
 mypy = "^1.4.1"
+boto3-stubs = "^1.28.5"
 
 [build-system]
 requires = ["poetry-core"]
