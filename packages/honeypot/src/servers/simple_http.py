@@ -4,10 +4,11 @@ from eventClients.event_client_adapter_protocol import EventClientAdapterProtoco
 from dataclasses import dataclass
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from threading import Thread
+from typing import Any
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
-    def __init__(self, request, client_address, server):
+    def __init__(self, request: Any, client_address: Any, server: Any) -> None:
         self.__eventClient: EventClientAdapterProtocol | None = server.eventClient
 
         super().__init__(request, client_address, server)
