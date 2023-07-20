@@ -13,10 +13,25 @@ from servers.server_adapter_protocol import ServerAdapterProtocol
 serverNameToEnvVarDict = {"simple_http": "ENABLE_SERVER_SIMPLE_HTTP"}
 
 
-def isServerEnabled(serverName: str) -> bool:
-    envVarName = serverNameToEnvVarDict[serverName]
+class ServerAdaptersManager:
+    def __init__(self) -> None:
+        self.__serverAdapters: list[ServerAdapterProtocol] = []
 
-    return isEnvironmentVariableTruthy(envVarName)
+    def startServers(self) -> None:
+        eventClient = tryCreateEventbrigeClient()
+
+        if isServerEnabled("simple_http"):
+            sa = simple_http.createServerAdapter(
+                simple_http.ServerAdapterInputs(eventClient=eventClient)
+            )
+            self.__serverAdapters.append(sa)
+
+        for serverAdapter in self.__serverAdapters:
+            serverAdapter.start()
+
+    def stopServers(self) -> None:
+        for serverAdapter in self.__serverAdapters:
+            serverAdapter.stop()
 
 
 def tryCreateEventbrigeClient() -> EventClientAdapterProtocol | None:
@@ -38,6 +53,12 @@ def tryCreateEventbrigeClient() -> EventClientAdapterProtocol | None:
         return None
 
 
+def isServerEnabled(serverName: str) -> bool:
+    envVarName = serverNameToEnvVarDict[serverName]
+
+    return isEnvironmentVariableTruthy(envVarName)
+
+
 def isEnvironmentVariableTruthy(envVarName: str) -> bool:
     envVarValue = os.environ.get(envVarName)
 
@@ -48,24 +69,14 @@ def isEnvironmentVariableTruthy(envVarName: str) -> bool:
 
 
 if __name__ == "__main__":
-    serverAdapters: list[ServerAdapterProtocol] = []
+    serverAdaptersManager = ServerAdaptersManager()
 
     def terminationHandler(sig: int, frame: Any) -> None:
-        for serverAdapter in serverAdapters:
-            serverAdapter.stop()
+        serverAdaptersManager.stopServers()
 
         print("Exiting the process")
 
     signal.signal(signal.SIGINT, terminationHandler)
     signal.signal(signal.SIGTERM, terminationHandler)
 
-    eventClient = tryCreateEventbrigeClient()
-
-    if isServerEnabled("simple_http"):
-        sa = simple_http.createServerAdapter(
-            simple_http.ServerAdapterInputs(eventClient=eventClient)
-        )
-        serverAdapters.append(sa)
-
-    for serverAdapter in serverAdapters:
-        serverAdapter.start()
+    serverAdaptersManager.startServers()
