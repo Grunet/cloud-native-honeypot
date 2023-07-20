@@ -32,10 +32,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
 
 class SimpleHttpServerAdapter(ServerAdapterProtocol):
-    def __init__(self, **kwargs) -> None:
-        self.__eventClient: EventClientAdapterProtocol | None = kwargs.get(
-            "eventClient"
-        )
+    def __init__(self, eventClient: EventClientAdapterProtocol | None) -> None:
+        self.__eventClient: EventClientAdapterProtocol | None = eventClient
 
         self.__httpServer: HTTPServer | None = None
 

@@ -7,8 +7,8 @@ import json
 
 
 class EventbridgeClientAdapter(EventClientAdapterProtocol):
-    def __init__(self, **kwargs) -> None:
-        self.__eventBusNameOrArn = kwargs.get("eventBusNameOrArn")
+    def __init__(self, eventBusNameOrArn: str) -> None:
+        self.__eventBusNameOrArn: str = eventBusNameOrArn
 
         self.__eventbridgeClient = boto3.client("events")
 
