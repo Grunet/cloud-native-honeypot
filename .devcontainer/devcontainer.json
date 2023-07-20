@@ -39,7 +39,8 @@
 				"python.linting.flake8Args": [
 					"--max-line-length=88",
 					"--ignore=E203"
-				] // These are duplicated in the .flake8 config file
+				], // These are duplicated in the .flake8 config file
+				"python.defaultInterpreterPath": "/home/vscode/.cache/pypoetry/virtualenvs/honeypot-gX_fOwtd-py3.11/bin/python" // Found by running "poetry show -v" and looking at the first emitted line
 			}
 		}
 	},
