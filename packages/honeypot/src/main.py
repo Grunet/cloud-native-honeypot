@@ -26,6 +26,10 @@ def tryCreateEventbrigeClient() -> EventClientAdapterProtocol | None:
     try:
         eventBusNameOrArn = os.environ.get("EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN")
 
+        if not eventBusNameOrArn:
+            print("Missing EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN")
+            return None
+
         return createEventClientAdapter(
             EventbridgeClientAdapterInputs(eventBusNameOrArn=eventBusNameOrArn)
         )
