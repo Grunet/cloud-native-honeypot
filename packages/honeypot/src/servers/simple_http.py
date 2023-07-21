@@ -25,6 +25,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                     }
                 )
             except Exception as ex:
+                print("Failed to send event in response to GET request")
                 print(ex)
 
         self.send_response(200)

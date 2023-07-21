@@ -49,6 +49,7 @@ def tryCreateEventbrigeClient() -> EventClientAdapterProtocol | None:
             EventbridgeClientAdapterInputs(eventBusNameOrArn=eventBusNameOrArn)
         )
     except Exception as ex:
+        print("Failed to create eventbridge client")
         print(ex)
         return None
 
