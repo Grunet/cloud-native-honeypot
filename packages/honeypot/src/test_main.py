@@ -41,10 +41,10 @@ class TestServerAdaptersManager(unittest.TestCase):
             ),  # This is implicitly part of the assertions
         )
 
+        conn = http.client.HTTPConnection("127.0.0.1:8000", timeout=5)
+
         # Act
         self.__serverAdaptersManager.startServers()
-
-        conn = http.client.HTTPConnection("127.0.0.1:8000", timeout=5)
 
         conn.request("GET", "/")
 
