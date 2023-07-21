@@ -6,6 +6,9 @@
   "search_path": [
     {
       "site-package": "boto3"
+    },
+    {
+      "site-package": "moto"
     }
   ]
 }
