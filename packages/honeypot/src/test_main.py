@@ -3,6 +3,7 @@ from main import ServerAdaptersManager
 import unittest
 import http.client
 import os
+import json
 
 import boto3
 from moto import mock_events
@@ -19,7 +20,7 @@ class TestServerAdaptersManager(unittest.TestCase):
         del os.environ["ENABLE_SERVER_SIMPLE_HTTP"]
 
     @mock_events
-    def test_GET_to_simple_http_publishes_to_eventbridge(self) -> None:
+    def test_GET_to_simple_http_publishes_event_to_eventbridge(self) -> None:
         # Arrange
         os.environ["ENABLE_SERVER_SIMPLE_HTTP"] = "true"
 
@@ -27,15 +28,22 @@ class TestServerAdaptersManager(unittest.TestCase):
         os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
 
         eventbridgeClient = boto3.client("events")
-        eventBusArn = eventbridgeClient.create_event_bus(Name="test_bus")["EventBusArn"]
+        eventBusArn = eventbridgeClient.create_event_bus(Name="unused")["EventBusArn"]
 
         os.environ["EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN"] = eventBusArn
 
+        archiveName = "eventBusArchive"
+        eventbridgeClient.create_archive(
+            ArchiveName=archiveName,
+            EventSourceArn=eventBusArn,
+            EventPattern=json.dumps({"source": ["cloud-native-honeypot"]}),
+        )
+
+        # Act
         self.__serverAdaptersManager.startServers()
 
         conn = http.client.HTTPConnection("127.0.0.1:8000", timeout=5)
 
-        # Act
         conn.request("GET", "/")
 
         # Assert
@@ -45,4 +53,7 @@ class TestServerAdaptersManager(unittest.TestCase):
 
         self.assertEqual(statusCode, 200)
 
-        # TODO - assert that EventBridge was hit
+        eventCount = eventbridgeClient.describe_archive(ArchiveName=archiveName)[
+            "EventCount"
+        ]
+        self.assertEqual(eventCount, 1)
