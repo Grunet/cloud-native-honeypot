@@ -1,22 +1,26 @@
-from .simple_http import createServerAdapter, ServerAdapterInputs
+from main import ServerAdaptersManager
 
 import unittest
 import http.client
+import os
 
 
-class TestSimpleHttpServerAdapter(unittest.TestCase):
+class TestServerAdaptersManager(unittest.TestCase):
     def setUp(self) -> None:
-        self.__serverAdapter = createServerAdapter(
-            ServerAdapterInputs(eventClient=None)
-        )
-        self.__serverAdapter.start()
+        self.__serverAdaptersManager = ServerAdaptersManager()
 
     def tearDown(self) -> None:
         # Here for cleanup regardless of what happens during a test
-        self.__serverAdapter.stop()
+        self.__serverAdaptersManager.stopServers()
 
-    def test_GET_returns_200(self) -> None:
+        del os.environ["ENABLE_SERVER_SIMPLE_HTTP"]
+
+    def test_GET_to_simple_http_publishes_to_eventbridge(self) -> None:
         # Arrange
+        os.environ["ENABLE_SERVER_SIMPLE_HTTP"] = "true"
+
+        self.__serverAdaptersManager.startServers()
+
         conn = http.client.HTTPConnection("127.0.0.1:8000", timeout=5)
 
         # Act
@@ -29,6 +33,4 @@ class TestSimpleHttpServerAdapter(unittest.TestCase):
 
         self.assertEqual(statusCode, 200)
 
-
-if __name__ == "__main__":
-    unittest.main()
+        # TODO - assert that EventBridge was hit
