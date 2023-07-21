@@ -25,7 +25,7 @@ class TestServerAdaptersManager(unittest.TestCase):
         os.environ["ENABLE_SERVER_SIMPLE_HTTP"] = "true"
 
         os.environ["ENABLE_EVENT_CLIENT_EVENTBRIDGE"] = "true"
-        os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+        os.environ["AWS_DEFAULT_REGION"] = "us-east-1"  # Choice is unimportant
 
         eventbridgeClient = boto3.client("events")
         eventBusArn = eventbridgeClient.create_event_bus(Name="unused")["EventBusArn"]
