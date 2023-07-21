@@ -6,7 +6,9 @@ import os
 import json
 
 import boto3
-from moto import mock_events
+
+# See https://github.com/getmoto/moto/issues/4944 for if the ignore can be removed
+from moto import mock_events  # type: ignore[import]
 
 
 class TestServerAdaptersManager(unittest.TestCase):
@@ -19,7 +21,8 @@ class TestServerAdaptersManager(unittest.TestCase):
 
         del os.environ["ENABLE_SERVER_SIMPLE_HTTP"]
 
-    @mock_events
+    # See https://github.com/getmoto/moto/issues/4944 for if the ignore can be removed
+    @mock_events  # type: ignore[misc]
     def test_GET_to_simple_http_publishes_event_to_eventbridge(self) -> None:
         # Arrange
         os.environ["ENABLE_SERVER_SIMPLE_HTTP"] = "true"
