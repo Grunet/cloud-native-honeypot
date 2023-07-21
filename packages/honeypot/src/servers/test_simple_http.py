@@ -1,4 +1,4 @@
-from .simple_http import createServerAdapter
+from .simple_http import createServerAdapter, ServerAdapterInputs
 
 import unittest
 import http.client
@@ -6,10 +6,12 @@ import http.client
 
 class TestSimpleHttpServerAdapter(unittest.TestCase):
     def setUp(self) -> None:
-        self.__serverAdapter = createServerAdapter()
-        self.__serverAdapter.start()
+        self.__serverAdapter = createServerAdapter(
+            ServerAdapterInputs(eventClient=None)
+        )
 
     def tearDown(self) -> None:
+        # Here for cleanup regardless of what happens during a test
         self.__serverAdapter.stop()
 
     def test_GET_returns_200(self) -> None:
@@ -17,6 +19,8 @@ class TestSimpleHttpServerAdapter(unittest.TestCase):
         conn = http.client.HTTPConnection("127.0.0.1:8000", timeout=5)
 
         # Act
+        self.__serverAdapter.start()
+
         conn.request("GET", "/")
 
         # Assert

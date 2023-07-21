@@ -9,8 +9,13 @@ What is in scope for breaking changes includes
 - Environment variables for the docker image
 - Ports exposed by the docker image
 - Container healthcheck routes exposed by the docker image
+- Metadata and details of published events
 
 ## Changes
+
+### v0.3.0
+
+- Updated the simple http server to publish an event to an Eventbridge event bus on all GET requests, if the functionality is enabled (via environment variables)
 
 ### v0.2.3
 
