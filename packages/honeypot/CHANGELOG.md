@@ -13,6 +13,10 @@ What is in scope for breaking changes includes
 
 ## Changes
 
+### v0.3.0
+
+- Updated the simple http server to publish an event to an Eventbridge event bus on all GET requests, if the functionality is enabled (via environment variables)
+
 ### v0.2.3
 
 - Try fix an issue with cosign prompting in the release workflow
