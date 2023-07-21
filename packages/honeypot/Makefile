@@ -11,6 +11,6 @@ test-unit:
 start-server-simple-http:
 	ENABLE_SERVER_SIMPLE_HTTP=true poetry run python ./src/main.py
 start-docker-simple-http:
-	cd ./src/ && docker compose up -d --build
+	docker compose up -d --build
 stop-docker-simple-http:
-	cd ./src/ && docker compose down
+	docker compose down
