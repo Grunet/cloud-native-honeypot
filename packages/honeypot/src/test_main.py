@@ -36,7 +36,9 @@ class TestServerAdaptersManager(unittest.TestCase):
         eventbridgeClient.create_archive(
             ArchiveName=archiveName,
             EventSourceArn=eventBusArn,
-            EventPattern=json.dumps({"source": ["cloud-native-honeypot"]}),
+            EventPattern=json.dumps(
+                {"source": ["cloud-native-honeypot"]}
+            ),  # This is implicitly part of the assertions
         )
 
         # Act
