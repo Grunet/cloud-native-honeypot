@@ -4,6 +4,9 @@ import unittest
 import http.client
 import os
 
+import boto3
+from moto import mock_events
+
 
 class TestServerAdaptersManager(unittest.TestCase):
     def setUp(self) -> None:
@@ -15,9 +18,18 @@ class TestServerAdaptersManager(unittest.TestCase):
 
         del os.environ["ENABLE_SERVER_SIMPLE_HTTP"]
 
+    @mock_events
     def test_GET_to_simple_http_publishes_to_eventbridge(self) -> None:
         # Arrange
         os.environ["ENABLE_SERVER_SIMPLE_HTTP"] = "true"
+
+        os.environ["ENABLE_EVENT_CLIENT_EVENTBRIDGE"] = "true"
+        os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+
+        eventbridgeClient = boto3.client("events")
+        eventBusArn = eventbridgeClient.create_event_bus(Name="test_bus")["EventBusArn"]
+
+        os.environ["EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN"] = eventBusArn
 
         self.__serverAdaptersManager.startServers()
 
