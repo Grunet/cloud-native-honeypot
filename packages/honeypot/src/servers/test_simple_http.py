@@ -11,18 +11,17 @@ import http.client
 
 class TestSimpleHttpServerAdapter(unittest.TestCase):
     def setUp(self) -> None:
-        self.__server_adapter: ServerAdapterProtocol | None = None
+        self.__server_adapter: ServerAdapterProtocol = create_server_adapter(
+            ServerAdapterInputs(event_client=None)
+        )
 
     def tearDown(self) -> None:
         # Here for cleanup regardless of what happens during a test
-        if self.__server_adapter:
-            self.__server_adapter.stop()
+        self.__server_adapter.stop()
 
     def test_GET_returns_200(self) -> None:
         # Arrange
-        self.__server_adapter = create_server_adapter(
-            ServerAdapterInputs(event_client=None)
-        )
+        # server_adapter setup in setUp
 
         conn = http.client.HTTPConnection("127.0.0.1:8000", timeout=5)
 
