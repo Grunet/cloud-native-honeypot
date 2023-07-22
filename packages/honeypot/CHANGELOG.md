@@ -18,6 +18,7 @@ What is in scope for breaking changes includes
 - Add a health check route to the simple http server that doesn't publish an event to Eventbridge
 - Standardize almost all logging behind a logger
 - Update all code to follow PEP naming conventions for variables and functions (snake_case)
+- Update Github releases to point out the changelog
 
 ### v0.3.0
 
