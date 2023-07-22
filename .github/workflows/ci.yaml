@@ -53,6 +53,7 @@ jobs:
 
       - name: Smoke Tests - Health Check
         run: |
+          sleep 5
           curl --fail http://127.0.0.1:8000/healthcheck
 
       - name: Smoke Tests - Server Shutdown
