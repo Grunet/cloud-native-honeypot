@@ -1,4 +1,5 @@
 from main import ServerAdaptersManager
+from telemetry.telemetry_manager import create_telemetry_manager
 
 import unittest
 import http.client
@@ -13,7 +14,9 @@ from moto import mock_events  # type: ignore[import]
 
 class TestServerAdaptersManager(unittest.TestCase):
     def setUp(self) -> None:
-        self.__server_adapters_manager = ServerAdaptersManager()
+        self.__server_adapters_manager = ServerAdaptersManager(
+            telemetry_manager=create_telemetry_manager()
+        )
 
     def tearDown(self) -> None:
         # Here for cleanup regardless of what happens during a test

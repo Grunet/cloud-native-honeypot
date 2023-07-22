@@ -9,20 +9,28 @@ from event_clients.eventbridge_client_adapter import (
 )
 from servers import simple_http
 from servers.server_adapter_protocol import ServerAdapterProtocol
+from telemetry.telemetry_manager import create_telemetry_manager
+from telemetry.telemetry_manager_protocol import TelemetryManagerProtocol
 
 server_name_to_env_var_dict = {"simple_http": "ENABLE_SERVER_SIMPLE_HTTP"}
 
 
 class ServerAdaptersManager:
-    def __init__(self) -> None:
+    def __init__(self, telemetry_manager: TelemetryManagerProtocol) -> None:
         self.__server_adapters: list[ServerAdapterProtocol] = []
+        self.__telemetry_manager = telemetry_manager
 
     def start_servers(self) -> None:
-        event_client = try_create_eventbrige_client()
+        event_client = try_create_eventbrige_client(
+            telemetry_manager=self.__telemetry_manager
+        )
 
         if is_server_enabled("simple_http"):
             sa = simple_http.create_server_adapter(
-                simple_http.ServerAdapterInputs(event_client=event_client)
+                simple_http.ServerAdapterInputs(
+                    telemetry_manager=self.__telemetry_manager,
+                    event_client=event_client,
+                )
             )
             self.__server_adapters.append(sa)
 
@@ -34,7 +42,9 @@ class ServerAdaptersManager:
             server_adapter.stop()
 
 
-def try_create_eventbrige_client() -> EventClientAdapterProtocol | None:
+def try_create_eventbrige_client(
+    telemetry_manager: TelemetryManagerProtocol,
+) -> EventClientAdapterProtocol | None:
     if not is_environment_variable_truthy("ENABLE_EVENT_CLIENT_EVENTBRIDGE"):
         return None
 
@@ -42,15 +52,28 @@ def try_create_eventbrige_client() -> EventClientAdapterProtocol | None:
         event_bus_name_or_arn = os.environ.get("EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN")
 
         if not event_bus_name_or_arn:
-            print("Missing EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN")
+            telemetry_manager.record_non_transaction_detail(
+                {
+                    "message": "Missing EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN",
+                    "level": "ERROR",
+                }
+            )
             return None
 
         return create_event_client_adapter(
-            EventbridgeClientAdapterInputs(event_bus_name_or_arn=event_bus_name_or_arn)
+            EventbridgeClientAdapterInputs(
+                telemetry_manager=telemetry_manager,
+                event_bus_name_or_arn=event_bus_name_or_arn,
+            )
         )
     except Exception as ex:
-        print("Failed to create eventbridge client")
-        print(ex)
+        telemetry_manager.record_non_transaction_detail(
+            {
+                "message": "Failed to create eventbridge client",
+                "level": "ERROR",
+                "exception": ex,
+            }
+        )
         return None
 
 
@@ -70,12 +93,15 @@ def is_environment_variable_truthy(env_var_name: str) -> bool:
 
 
 if __name__ == "__main__":
-    server_adapters_manager = ServerAdaptersManager()
+    telemetry_manager = create_telemetry_manager()
+    server_adapters_manager = ServerAdaptersManager(telemetry_manager=telemetry_manager)
 
     def termination_handler(sig: int, frame: Any) -> None:
         server_adapters_manager.stop_servers()
 
-        print("Exiting the process")
+        telemetry_manager.record_non_transaction_detail(
+            {"message": "Exiting the process", "level": "INFO"}
+        )
 
     signal.signal(signal.SIGINT, termination_handler)
     signal.signal(signal.SIGTERM, termination_handler)
