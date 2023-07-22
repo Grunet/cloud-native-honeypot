@@ -13,8 +13,9 @@ What is in scope for breaking changes includes
 
 ## Changes
 
-### v0.3.1
+### v0.4.0
 
+- Add a health check route to the simple http server that doesn't publish an event to Eventbridge
 - Update all code to follow PEP naming conventions for variables and functions (snake_case)
 
 ### v0.3.0

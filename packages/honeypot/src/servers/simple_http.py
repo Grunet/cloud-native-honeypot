@@ -14,7 +14,13 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         super().__init__(request, client_address, server)
 
     def do_GET(self) -> None:
-        if self.__event_client:
+        is_healthcheck = (self.path == "/healthcheck") or (self.path == "/healthcheck/")
+        if is_healthcheck:
+            self.log_message("Healthcheck route hit")
+
+        should_publish_event = not is_healthcheck
+
+        if self.__event_client and should_publish_event:
             try:
                 self.__event_client.send_event(
                     {
