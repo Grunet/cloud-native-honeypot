@@ -47,3 +47,28 @@ The following is an overview of all the areas that may need patches and updates:
     - Chainguard base images
     - Python version (in Dockerfile)
     - Docker Compose version
+
+### Maintenance Targets
+
+By default, the target for each area is
+
+- Be on the latest major version that has been out for a while
+
+with the exceptions being
+
+- Python (latest minor version for Python 3 is the equivalent)
+- Well-known binaries (e.g. curl, jq, that don't strictly need their versions pinned as much)
+- Docker Compose version (latest minor version is the equivalent)
+
+The goals here are twofold
+
+- To stay away from end-of-life and lack of security support situations
+- To always be able to easily uptake security patches without needing to worry about breaking changes at the same time
+
+### Maintenance Strategy
+
+TODO
+
+### Learning About and Taking Security Patches
+
+TODO
