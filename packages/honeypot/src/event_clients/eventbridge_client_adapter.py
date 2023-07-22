@@ -7,19 +7,19 @@ import json
 
 
 class EventbridgeClientAdapter(EventClientAdapterProtocol):
-    def __init__(self, eventBusNameOrArn: str) -> None:
-        self.__eventBusNameOrArn: str = eventBusNameOrArn
+    def __init__(self, event_bus_name_or_arn: str) -> None:
+        self.__event_bus_name_or_arn: str = event_bus_name_or_arn
 
-        self.__eventbridgeClient = boto3.client("events")
+        self.__eventbridge_client = boto3.client("events")
 
-    def sendEvent(self, eventDetails: object) -> None:
-        response = self.__eventbridgeClient.put_events(
+    def send_event(self, event_details: object) -> None:
+        response = self.__eventbridge_client.put_events(
             Entries=[
                 {
                     "Source": "cloud-native-honeypot",
                     "DetailType": "cloudNativeHoneypotTriggered",
-                    "Detail": json.dumps(eventDetails),
-                    "EventBusName": self.__eventBusNameOrArn,
+                    "Detail": json.dumps(event_details),
+                    "EventBusName": self.__event_bus_name_or_arn,
                 }
             ]
         )
@@ -35,14 +35,14 @@ class EventbridgeClientAdapter(EventClientAdapterProtocol):
 
 @dataclass
 class EventbridgeClientAdapterInputs:
-    eventBusNameOrArn: str
+    event_bus_name_or_arn: str
 
 
-def createEventClientAdapter(
+def create_event_client_adapter(
     inputs: EventbridgeClientAdapterInputs,
 ) -> EventClientAdapterProtocol:
-    eventBusNameOrArn = inputs.eventBusNameOrArn
-    if not eventBusNameOrArn:
-        raise ValueError("eventBusNameOrArn must be a non-empty string")
+    event_bus_name_or_arn = inputs.event_bus_name_or_arn
+    if not event_bus_name_or_arn:
+        raise ValueError("event_bus_name_or_arn must be a non-empty string")
 
-    return EventbridgeClientAdapter(eventBusNameOrArn=eventBusNameOrArn)
+    return EventbridgeClientAdapter(event_bus_name_or_arn=event_bus_name_or_arn)

@@ -2,51 +2,51 @@ import signal
 import os
 from typing import Any
 
-from eventClients.event_client_adapter_protocol import EventClientAdapterProtocol
-from eventClients.eventbridge_client_adapter import (
-    createEventClientAdapter,
+from event_clients.event_client_adapter_protocol import EventClientAdapterProtocol
+from event_clients.eventbridge_client_adapter import (
+    create_event_client_adapter,
     EventbridgeClientAdapterInputs,
 )
 from servers import simple_http
 from servers.server_adapter_protocol import ServerAdapterProtocol
 
-serverNameToEnvVarDict = {"simple_http": "ENABLE_SERVER_SIMPLE_HTTP"}
+server_name_to_env_var_dict = {"simple_http": "ENABLE_SERVER_SIMPLE_HTTP"}
 
 
 class ServerAdaptersManager:
     def __init__(self) -> None:
-        self.__serverAdapters: list[ServerAdapterProtocol] = []
+        self.__server_adapters: list[ServerAdapterProtocol] = []
 
-    def startServers(self) -> None:
-        eventClient = tryCreateEventbrigeClient()
+    def start_servers(self) -> None:
+        event_client = try_create_eventbrige_client()
 
-        if isServerEnabled("simple_http"):
-            sa = simple_http.createServerAdapter(
-                simple_http.ServerAdapterInputs(eventClient=eventClient)
+        if is_server_enabled("simple_http"):
+            sa = simple_http.create_server_adapter(
+                simple_http.ServerAdapterInputs(event_client=event_client)
             )
-            self.__serverAdapters.append(sa)
+            self.__server_adapters.append(sa)
 
-        for serverAdapter in self.__serverAdapters:
-            serverAdapter.start()
+        for server_adapter in self.__server_adapters:
+            server_adapter.start()
 
-    def stopServers(self) -> None:
-        for serverAdapter in self.__serverAdapters:
-            serverAdapter.stop()
+    def stop_servers(self) -> None:
+        for server_adapter in self.__server_adapters:
+            server_adapter.stop()
 
 
-def tryCreateEventbrigeClient() -> EventClientAdapterProtocol | None:
-    if not isEnvironmentVariableTruthy("ENABLE_EVENT_CLIENT_EVENTBRIDGE"):
+def try_create_eventbrige_client() -> EventClientAdapterProtocol | None:
+    if not is_environment_variable_truthy("ENABLE_EVENT_CLIENT_EVENTBRIDGE"):
         return None
 
     try:
-        eventBusNameOrArn = os.environ.get("EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN")
+        event_bus_name_or_arn = os.environ.get("EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN")
 
-        if not eventBusNameOrArn:
+        if not event_bus_name_or_arn:
             print("Missing EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN")
             return None
 
-        return createEventClientAdapter(
-            EventbridgeClientAdapterInputs(eventBusNameOrArn=eventBusNameOrArn)
+        return create_event_client_adapter(
+            EventbridgeClientAdapterInputs(event_bus_name_or_arn=event_bus_name_or_arn)
         )
     except Exception as ex:
         print("Failed to create eventbridge client")
@@ -54,30 +54,30 @@ def tryCreateEventbrigeClient() -> EventClientAdapterProtocol | None:
         return None
 
 
-def isServerEnabled(serverName: str) -> bool:
-    envVarName = serverNameToEnvVarDict[serverName]
+def is_server_enabled(serverName: str) -> bool:
+    env_var_name = server_name_to_env_var_dict[serverName]
 
-    return isEnvironmentVariableTruthy(envVarName)
+    return is_environment_variable_truthy(env_var_name)
 
 
-def isEnvironmentVariableTruthy(envVarName: str) -> bool:
-    envVarValue = os.environ.get(envVarName)
+def is_environment_variable_truthy(env_var_name: str) -> bool:
+    env_var_value = os.environ.get(env_var_name)
 
-    if (envVarValue) and (len(envVarValue) > 0):
+    if (env_var_value) and (len(env_var_value) > 0):
         return True
 
     return False
 
 
 if __name__ == "__main__":
-    serverAdaptersManager = ServerAdaptersManager()
+    server_adapters_manager = ServerAdaptersManager()
 
-    def terminationHandler(sig: int, frame: Any) -> None:
-        serverAdaptersManager.stopServers()
+    def termination_handler(sig: int, frame: Any) -> None:
+        server_adapters_manager.stopServers()
 
         print("Exiting the process")
 
-    signal.signal(signal.SIGINT, terminationHandler)
-    signal.signal(signal.SIGTERM, terminationHandler)
+    signal.signal(signal.SIGINT, termination_handler)
+    signal.signal(signal.SIGTERM, termination_handler)
 
-    serverAdaptersManager.startServers()
+    server_adapters_manager.startServers()
