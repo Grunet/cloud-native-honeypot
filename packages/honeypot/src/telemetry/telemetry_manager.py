@@ -12,7 +12,7 @@ class TelemetryManager(TelemetryManagerProtocol):
         self.__record_detail(structured_data=structured_data)
 
     def __record_detail(self, structured_data: dict[str, object]):
-        data_as_json = json.dumps(structured_data)
+        data_as_json = json.dumps(structured_data, sort_keys=True)
 
         sys.stdout.write(data_as_json)
         sys.stdout.write("\n")
