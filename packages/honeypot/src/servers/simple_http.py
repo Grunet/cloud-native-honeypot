@@ -46,7 +46,8 @@ class SimpleHttpServerAdapter(ServerAdapterProtocol):
         # Only clear way to inject the client into request handling
         # is by appending it onto the server object
         # and reading it later on
-        self.__http_server.event_client = self.__event_client  # type: ignore[attr-defined]
+        event_client = self.__event_client  # gets around next line length limit
+        self.__http_server.event_client = event_client  # type: ignore[attr-defined]
 
         def start_in_separate_thread(http_server: HTTPServer | None) -> None:
             if http_server:
