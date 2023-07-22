@@ -16,7 +16,7 @@ server_name_to_env_var_dict = {"simple_http": "ENABLE_SERVER_SIMPLE_HTTP"}
 
 
 class ServerAdaptersManager:
-    def __init__(self, telemetry_manager) -> None:
+    def __init__(self, telemetry_manager: TelemetryManagerProtocol) -> None:
         self.__server_adapters: list[ServerAdapterProtocol] = []
         self.__telemetry_manager = telemetry_manager
 

@@ -4,6 +4,7 @@ from .simple_http import (
 )
 from .server_adapter_protocol import ServerAdapterProtocol
 from event_clients.event_client_adapter_protocol import EventClientAdapterProtocol
+from telemetry.telemetry_manager_protocol import TelemetryManagerProtocol
 
 import unittest
 import http.client
@@ -12,7 +13,9 @@ import http.client
 class TestSimpleHttpServerAdapter(unittest.TestCase):
     def setUp(self) -> None:
         self.__server_adapter: ServerAdapterProtocol = create_server_adapter(
-            ServerAdapterInputs(event_client=None)
+            ServerAdapterInputs(
+                telemetry_manager=create_stub_telemetry_manager(), event_client=None
+            )
         )
 
     def tearDown(self) -> None:
@@ -48,7 +51,10 @@ class TestSimpleHttpServerAdapter(unittest.TestCase):
 
         mock_event_client = MockEventClient()
         self.__server_adapter = create_server_adapter(
-            ServerAdapterInputs(event_client=mock_event_client)
+            ServerAdapterInputs(
+                telemetry_manager=create_stub_telemetry_manager(),
+                event_client=mock_event_client,
+            )
         )
 
         conn = http.client.HTTPConnection("127.0.0.1:8000", timeout=5)
@@ -66,6 +72,19 @@ class TestSimpleHttpServerAdapter(unittest.TestCase):
         self.assertEqual(status_code, 200)
 
         self.assertEqual(mock_event_client.send_event_hit, False)
+
+
+def create_stub_telemetry_manager() -> TelemetryManagerProtocol:
+    class StubTelemetryManager:
+        def record_transaction_detail(self, structured_data: dict[str, object]) -> None:
+            pass
+
+        def record_non_transaction_detail(
+            self, structured_data: dict[str, object]
+        ) -> None:
+            pass
+
+    return StubTelemetryManager()
 
 
 if __name__ == "__main__":
