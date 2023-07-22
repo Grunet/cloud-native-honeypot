@@ -25,6 +25,9 @@ class TelemetryManager(TelemetryManagerProtocol):
             stack_trace = traceback.format_exc()
             cloned_data["stackTrace"] = stack_trace
 
+        if "exception" in cloned_data:
+            cloned_data["exception"] = str(cloned_data["exception"])
+
         data_as_json = json.dumps(cloned_data, sort_keys=True)
 
         sys.stdout.write(data_as_json)
