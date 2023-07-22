@@ -67,7 +67,30 @@ The goals here are twofold
 
 ### Maintenance Strategy
 
-TODO
+On a monthly basis, I will check to see if any area is not on its target and attempt to rectify that
+
+#### Python
+
+To find if there's a new minor version available
+
+1. Navigate to https://www.python.org/downloads/source/
+2. Find the "Stable Releases"
+3. Search for the next minor version after the one in use in the repo (e.g. if the repo is using 3.11 search for 3.12)
+    - If you don't find it, there's nothing to do this time
+    - If you do find it, continue on
+
+Now that you've found the new Python minor version, you'll need to try and update it in these locations
+
+- .devcontainer/Dockerfile
+- .github/workflow/ci.yaml
+- packages/honeypot/Dockerfile (implicit in the base images as well as listed in commands)
+
+If any one of them doesn't yet have the new version, there's nothing to do this time.
+
+If they all have it, then create a PR to
+
+1. Update each one
+2. Update the minimum Python version in packages/honeypot/pyproject.toml
 
 ### Learning About and Taking Security Patches
 
