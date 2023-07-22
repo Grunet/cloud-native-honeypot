@@ -73,11 +73,11 @@ if __name__ == "__main__":
     server_adapters_manager = ServerAdaptersManager()
 
     def termination_handler(sig: int, frame: Any) -> None:
-        server_adapters_manager.stopServers()
+        server_adapters_manager.stop_servers()
 
         print("Exiting the process")
 
     signal.signal(signal.SIGINT, termination_handler)
     signal.signal(signal.SIGTERM, termination_handler)
 
-    server_adapters_manager.startServers()
+    server_adapters_manager.start_servers()

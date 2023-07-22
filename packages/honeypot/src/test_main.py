@@ -49,7 +49,7 @@ class TestServerAdaptersManager(unittest.TestCase):
         conn = http.client.HTTPConnection("127.0.0.1:8000", timeout=5)
 
         # Act
-        self.__server_adapters_manager.startServers()
+        self.__server_adapters_manager.start_servers()
 
         conn.request("GET", "/")
 

@@ -7,7 +7,7 @@ import http.client
 class TestSimpleHttpServerAdapter(unittest.TestCase):
     def setUp(self) -> None:
         self.__server_adapter = create_server_adapter(
-            ServerAdapterInputs(eventClient=None)
+            ServerAdapterInputs(event_client=None)
         )
 
     def tearDown(self) -> None:
