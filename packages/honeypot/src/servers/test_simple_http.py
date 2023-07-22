@@ -1,4 +1,8 @@
-from .simple_http import create_server_adapter, ServerAdapterInputs
+from .simple_http import (
+    create_server_adapter,
+    ServerAdapterInputs,
+)
+from .server_adapter_protocol import ServerAdapterProtocol
 from event_clients.event_client_adapter_protocol import EventClientAdapterProtocol
 
 import unittest
@@ -7,11 +11,12 @@ import http.client
 
 class TestSimpleHttpServerAdapter(unittest.TestCase):
     def setUp(self) -> None:
-        self.__server_adapter = None
+        self.__server_adapter: ServerAdapterProtocol | None = None
 
     def tearDown(self) -> None:
         # Here for cleanup regardless of what happens during a test
-        self.__server_adapter.stop()
+        if self.__server_adapter:
+            self.__server_adapter.stop()
 
     def test_GET_returns_200(self) -> None:
         # Arrange
