@@ -26,6 +26,7 @@ class TelemetryManager(TelemetryManagerProtocol):
             cloned_data["stackTrace"] = stack_trace
 
         if "exception" in cloned_data:
+            # Some exceptions are not json serializable as is
             cloned_data["exception"] = str(cloned_data["exception"])
 
         data_as_json = json.dumps(cloned_data, sort_keys=True)
