@@ -15,6 +15,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         super().__init__(request, client_address, server)
 
+    # Not overriding log_message to use telemetry_manager
+    # Too complex for not enough benefit at the moment
+
     def do_GET(self) -> None:
         is_healthcheck = (self.path == "/healthcheck") or (self.path == "/healthcheck/")
         if is_healthcheck:
