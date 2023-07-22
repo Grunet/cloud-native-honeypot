@@ -11,6 +11,7 @@ class EventbridgeClientAdapter(EventClientAdapterProtocol):
     def __init__(
         self, telemetry_manager: TelemetryManagerProtocol, event_bus_name_or_arn: str
     ) -> None:
+        self.__telemetry_manager = telemetry_manager
         self.__event_bus_name_or_arn: str = event_bus_name_or_arn
 
         self.__eventbridge_client = boto3.client("events")
@@ -28,11 +29,19 @@ class EventbridgeClientAdapter(EventClientAdapterProtocol):
         )
 
         if response["FailedEntryCount"] == 0:
-            print("Eventbridge event published successfully.")
+            self.__telemetry_manager.record_transaction_detail(
+                {
+                    "message": "Eventbridge event published successfully.",
+                    "level": "INFO",
+                }
+            )
         else:
-            print(
-                f"""Failed to publish {response['FailedEntryCount']} event(s) to
-                     Eventbridge."""
+            self.__telemetry_manager.record_transaction_detail(
+                {
+                    "message": f"""Failed to publish {response['FailedEntryCount']} \
+                    event(s) to Eventbridge.""",
+                    "level": "ERROR",
+                }
             )
 
 

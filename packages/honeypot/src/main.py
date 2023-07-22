@@ -10,6 +10,7 @@ from event_clients.eventbridge_client_adapter import (
 from servers import simple_http
 from servers.server_adapter_protocol import ServerAdapterProtocol
 from telemetry.telemetry_manager import create_telemetry_manager
+from telemetry.telemetry_manager_protocol import TelemetryManagerProtocol
 
 server_name_to_env_var_dict = {"simple_http": "ENABLE_SERVER_SIMPLE_HTTP"}
 
@@ -41,7 +42,7 @@ class ServerAdaptersManager:
 
 
 def try_create_eventbrige_client(
-    telemetry_manager,
+    telemetry_manager: TelemetryManagerProtocol,
 ) -> EventClientAdapterProtocol | None:
     if not is_environment_variable_truthy("ENABLE_EVENT_CLIENT_EVENTBRIDGE"):
         return None
@@ -50,7 +51,12 @@ def try_create_eventbrige_client(
         event_bus_name_or_arn = os.environ.get("EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN")
 
         if not event_bus_name_or_arn:
-            print("Missing EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN")
+            telemetry_manager.record_non_transaction_detail(
+                {
+                    "message": "Missing EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN",
+                    "level": "ERROR",
+                }
+            )
             return None
 
         return create_event_client_adapter(
@@ -60,8 +66,13 @@ def try_create_eventbrige_client(
             )
         )
     except Exception as ex:
-        print("Failed to create eventbridge client")
-        print(ex)
+        telemetry_manager.record_non_transaction_detail(
+            {
+                "message": "Failed to create eventbridge client",
+                "level": "ERROR",
+                "exception": ex,
+            }
+        )
         return None
 
 
@@ -87,7 +98,9 @@ if __name__ == "__main__":
     def termination_handler(sig: int, frame: Any) -> None:
         server_adapters_manager.stop_servers()
 
-        print("Exiting the process")
+        telemetry_manager.record_non_transaction_detail(
+            {"message": "Exiting the process", "level": "INFO"}
+        )
 
     signal.signal(signal.SIGINT, termination_handler)
     signal.signal(signal.SIGTERM, termination_handler)
