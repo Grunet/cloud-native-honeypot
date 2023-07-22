@@ -39,7 +39,7 @@ class EventbridgeClientAdapter(EventClientAdapterProtocol):
             self.__telemetry_manager.record_transaction_detail(
                 {
                     "message": f"""Failed to publish {response['FailedEntryCount']} \
-                    event(s) to Eventbridge.""",
+event(s) to Eventbridge.""",
                     "level": "ERROR",
                 }
             )
