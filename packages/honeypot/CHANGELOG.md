@@ -13,6 +13,10 @@ What is in scope for breaking changes includes
 
 ## Changes
 
+### v0.3.1
+
+- Update all code to follow PEP naming conventions for variables and functions (snake_case)
+
 ### v0.3.0
 
 - Updated the simple http server to publish an event to an Eventbridge event bus on all GET requests, if the functionality is enabled (via environment variables)

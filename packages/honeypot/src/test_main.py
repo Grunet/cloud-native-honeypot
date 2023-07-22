@@ -13,11 +13,11 @@ from moto import mock_events  # type: ignore[import]
 
 class TestServerAdaptersManager(unittest.TestCase):
     def setUp(self) -> None:
-        self.__serverAdaptersManager = ServerAdaptersManager()
+        self.__server_adapters_manager = ServerAdaptersManager()
 
     def tearDown(self) -> None:
         # Here for cleanup regardless of what happens during a test
-        self.__serverAdaptersManager.stopServers()
+        self.__server_adapters_manager.stop_servers()
 
         del os.environ["ENABLE_SERVER_SIMPLE_HTTP"]
 
@@ -30,15 +30,17 @@ class TestServerAdaptersManager(unittest.TestCase):
         os.environ["ENABLE_EVENT_CLIENT_EVENTBRIDGE"] = "true"
         os.environ["AWS_DEFAULT_REGION"] = "us-east-1"  # The choice is unimportant
 
-        eventbridgeClient = boto3.client("events")
-        eventBusArn = eventbridgeClient.create_event_bus(Name="unused")["EventBusArn"]
+        eventbridge_client = boto3.client("events")
+        event_bus_arn = eventbridge_client.create_event_bus(Name="unused")[
+            "EventBusArn"
+        ]
 
-        os.environ["EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN"] = eventBusArn
+        os.environ["EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN"] = event_bus_arn
 
-        archiveName = "eventBusArchive"
-        eventbridgeClient.create_archive(
-            ArchiveName=archiveName,
-            EventSourceArn=eventBusArn,
+        archive_name = "eventBusArchive"
+        eventbridge_client.create_archive(
+            ArchiveName=archive_name,
+            EventSourceArn=event_bus_arn,
             EventPattern=json.dumps(
                 {"source": ["cloud-native-honeypot"]}
             ),  # This is implicitly part of the assertions
@@ -47,18 +49,18 @@ class TestServerAdaptersManager(unittest.TestCase):
         conn = http.client.HTTPConnection("127.0.0.1:8000", timeout=5)
 
         # Act
-        self.__serverAdaptersManager.startServers()
+        self.__server_adapters_manager.start_servers()
 
         conn.request("GET", "/")
 
         # Assert
         response = conn.getresponse()
-        statusCode = response.getcode()
+        status_code = response.getcode()
         conn.close()  # unittest reports an unclosed socket even with this
 
-        self.assertEqual(statusCode, 200)
+        self.assertEqual(status_code, 200)
 
-        eventCount = eventbridgeClient.describe_archive(ArchiveName=archiveName)[
+        event_count = eventbridge_client.describe_archive(ArchiveName=archive_name)[
             "EventCount"
         ]
-        self.assertEqual(eventCount, 1)
+        self.assertEqual(event_count, 1)
