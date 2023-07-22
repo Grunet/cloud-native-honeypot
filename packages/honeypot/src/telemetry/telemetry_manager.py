@@ -21,7 +21,7 @@ class TelemetryManager(TelemetryManagerProtocol):
         formatted_time = current_time.isoformat()
         cloned_data["timestamp"] = formatted_time
 
-        if cloned_data["exception"]:
+        if "exception" in cloned_data:
             stack_trace = traceback.format_exc()
             cloned_data["stackTrace"] = stack_trace
 

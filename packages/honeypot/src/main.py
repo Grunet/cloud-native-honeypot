@@ -28,7 +28,8 @@ class ServerAdaptersManager:
         if is_server_enabled("simple_http"):
             sa = simple_http.create_server_adapter(
                 simple_http.ServerAdapterInputs(
-                    telemetry_manager=telemetry_manager, event_client=event_client
+                    telemetry_manager=self.__telemetry_manager,
+                    event_client=event_client,
                 )
             )
             self.__server_adapters.append(sa)
