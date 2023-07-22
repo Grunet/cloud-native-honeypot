@@ -51,6 +51,10 @@ jobs:
         run: |
           make start-docker-simple-http
 
+      - name: Smoke Tests - Health Check
+        run: |
+          curl --fail http://127.0.0.1/healthcheck
+
       - name: Smoke Tests - Server Shutdown
         run: |
           make stop-docker-simple-http
