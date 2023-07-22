@@ -4,6 +4,7 @@ import copy
 from datetime import datetime, timezone
 import json
 import sys
+import traceback
 
 
 class TelemetryManager(TelemetryManagerProtocol):
@@ -19,6 +20,10 @@ class TelemetryManager(TelemetryManagerProtocol):
         current_time = datetime.now(timezone.utc)
         formatted_time = current_time.isoformat()
         cloned_data["timestamp"] = formatted_time
+
+        if cloned_data["exception"]:
+            stack_trace = traceback.format_exc()
+            cloned_data["stackTrace"] = stack_trace
 
         data_as_json = json.dumps(cloned_data, sort_keys=True)
 
