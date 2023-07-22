@@ -1,5 +1,6 @@
 from .server_adapter_protocol import ServerAdapterProtocol
 from event_clients.event_client_adapter_protocol import EventClientAdapterProtocol
+from telemetry.telemetry_manager_protocol import TelemetryManagerProtocol
 
 from dataclasses import dataclass
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -40,7 +41,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
 
 class SimpleHttpServerAdapter(ServerAdapterProtocol):
-    def __init__(self, event_client: EventClientAdapterProtocol | None) -> None:
+    def __init__(
+        self,
+        telemetry_manager: TelemetryManagerProtocol,
+        event_client: EventClientAdapterProtocol | None,
+    ) -> None:
         self.__event_client: EventClientAdapterProtocol | None = event_client
 
         self.__http_server: HTTPServer | None = None
@@ -76,8 +81,11 @@ class SimpleHttpServerAdapter(ServerAdapterProtocol):
 
 @dataclass
 class ServerAdapterInputs:
+    telemetry_manager: TelemetryManagerProtocol
     event_client: EventClientAdapterProtocol | None
 
 
 def create_server_adapter(inputs: ServerAdapterInputs) -> ServerAdapterProtocol:
-    return SimpleHttpServerAdapter(event_client=inputs.event_client)
+    return SimpleHttpServerAdapter(
+        telemetry_manager=inputs.telemetry_manager, event_client=inputs.event_client
+    )

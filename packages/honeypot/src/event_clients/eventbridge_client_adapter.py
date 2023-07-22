@@ -1,4 +1,5 @@
 from .event_client_adapter_protocol import EventClientAdapterProtocol
+from telemetry.telemetry_manager_protocol import TelemetryManagerProtocol
 
 import boto3
 
@@ -7,7 +8,9 @@ import json
 
 
 class EventbridgeClientAdapter(EventClientAdapterProtocol):
-    def __init__(self, event_bus_name_or_arn: str) -> None:
+    def __init__(
+        self, telemetry_manager: TelemetryManagerProtocol, event_bus_name_or_arn: str
+    ) -> None:
         self.__event_bus_name_or_arn: str = event_bus_name_or_arn
 
         self.__eventbridge_client = boto3.client("events")
@@ -35,14 +38,14 @@ class EventbridgeClientAdapter(EventClientAdapterProtocol):
 
 @dataclass
 class EventbridgeClientAdapterInputs:
+    telemetry_manager: TelemetryManagerProtocol
     event_bus_name_or_arn: str
 
 
 def create_event_client_adapter(
     inputs: EventbridgeClientAdapterInputs,
 ) -> EventClientAdapterProtocol:
-    event_bus_name_or_arn = inputs.event_bus_name_or_arn
-    if not event_bus_name_or_arn:
-        raise ValueError("event_bus_name_or_arn must be a non-empty string")
-
-    return EventbridgeClientAdapter(event_bus_name_or_arn=event_bus_name_or_arn)
+    return EventbridgeClientAdapter(
+        telemetry_manager=inputs.telemetry_manager,
+        event_bus_name_or_arn=inputs.event_bus_name_or_arn,
+    )
