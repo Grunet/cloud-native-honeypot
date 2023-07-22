@@ -14,7 +14,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         super().__init__(request, client_address, server)
 
     def do_GET(self) -> None:
-
         is_healthcheck = (self.path == "/healthcheck") or (self.path == "/healthcheck/")
         if is_healthcheck:
             self.log_message("Healthcheck route hit")
