@@ -88,7 +88,7 @@ If any one of them doesn't yet have support for the new version, there's nothing
 If they all have it, then create a PR to
 
 1. Update each one
-2. Update the changelog and cut a release
+2. Update the changelog, the version, and cut a release
 
 #### Python
 
@@ -112,7 +112,29 @@ If they all have it, then create a PR to
 
 1. Update each one
 2. Update the minimum Python version in packages/honeypot/pyproject.toml
-3. Update the changelog and cut a release
+3. Update the changelog, the version, and cut a release
+
+#### Poetry
+
+To find if there's a new major version available
+
+1. Navigate to https://github.com/python-poetry/poetry/releases
+2. Search for the next major version after the one in use in the repo (e.g. if the repo is using 1.5.1 search for 2.x.y)
+    - If you don't find it, there's nothing to do this time
+    - If you do find it, continue on
+
+Now that you've found the new major version, you'll need to try and update it in these locations
+
+- .devcontainer/Dockerfile
+- .github/workflow/ci.yaml
+
+If any one of them doesn't yet have support for the new version, there's nothing to do this time.
+
+If they all have it, then create a PR to
+
+1. Update each one
+2. Re-generate the requirements.txt from the Poetry lockfile
+3. Update the changelog, the version, and cut a release
 
 ### Learning About and Taking Security Patches
 
