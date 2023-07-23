@@ -16,6 +16,7 @@ What is in scope for breaking changes includes
 ### v0.4.1
 
 - Make the logger no-op on exceptions
+- Document maintenance and security patching strategy
 
 ### v0.4.0
 
