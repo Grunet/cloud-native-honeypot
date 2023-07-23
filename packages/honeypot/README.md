@@ -136,6 +136,30 @@ If they all have it, then create a PR to
 2. Re-generate the requirements.txt from the Poetry lockfile
 3. Update the changelog, the version, and cut a release
 
+#### Docker CLI
+
+TODO
+
+#### Docker Compose
+
+TODO
+
+#### Chainguard base images
+
+TODO
+
+#### 3rd Party Github Actions
+
+TODO
+
+#### Cosign
+
+TODO
+
+#### Pypi dependencies
+
+TODO
+
 ### Learning About and Taking Security Patches
 
 TODO
