@@ -236,7 +236,7 @@ A watch for releases and security alerts was turned on for https://github.com/mo
 
 #### Chainguard base images
 
-TODO
+(Asked about this at https://twitter.com/__grunet/status/1683241030932471808)
 
 #### 3rd Party Github Actions
 
