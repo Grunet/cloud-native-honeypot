@@ -90,13 +90,15 @@ If they all have it, then create a PR to
 1. Update each one
 2. Update the changelog, the version, and cut a release
 
+If not, create a Github issue to track it.
+
 #### Python
 
 To find if there's a new minor version available
 
 1. Navigate to https://www.python.org/downloads/source/
 2. Find the "Stable Releases"
-3. Search for the next minor version after the one in use in the repo (e.g. if the repo is using 3.11 search for 3.12)
+3. Search for the latest minor version after the one in use in the repo (e.g. if the repo is using 3.11 search for 3.12)
     - If you don't find it, there's nothing to do this time
     - If you do find it, continue on
 
@@ -114,12 +116,14 @@ If they all have it, then create a PR to
 2. Update the minimum Python version in packages/honeypot/pyproject.toml
 3. Update the changelog, the version, and cut a release
 
+If not, create a Github issue to track it.
+
 #### Poetry
 
 To find if there's a new major version available
 
 1. Navigate to https://github.com/python-poetry/poetry/releases
-2. Search for the next major version after the one in use in the repo (e.g. if the repo is using 1.5.1 search for 2.x.y)
+2. Search for the latest major version after the one in use in the repo (e.g. if the repo is using 1.5.1 search for 2.x.y)
     - If you don't find it, there's nothing to do this time
     - If you do find it, continue on
 
@@ -136,9 +140,28 @@ If they all have it, then create a PR to
 2. Re-generate the requirements.txt from the Poetry lockfile
 3. Update the changelog, the version, and cut a release
 
+If not, create a Github issue to track it.
+
 #### Docker CLI
 
-TODO
+To find if there's a new major version available
+
+1. Navigate to https://github.com/moby/moby/releases
+2. Search for the latest major version after the one in use in the repo
+    - If you don't find it, there's nothing to do this time
+    - If you do find it, continue on
+
+Now that you've found the new major version, you'll need to try and update it in these locations
+
+- .devcontainer/devcontainer.json
+- .github/workflow/ci.yaml (this may require installing a custom version per https://stackoverflow.com/a/59797984/11866924)
+
+If they all have it available, then create a PR to 
+
+1. Update each one
+2. Update the changelog, but don't increment the version nor cut a release yet (since this is a dev-only change)
+
+If not, create a Github issue to track it.
 
 #### Docker Compose
 
