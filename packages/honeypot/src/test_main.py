@@ -14,7 +14,7 @@ from moto import mock_events  # type: ignore[import]
 
 class TestServerAdaptersManager(unittest.TestCase):
     def setUp(self) -> None:
-        self.__used_environment_variables = set()
+        self.__used_environment_variables: set[str] = set()
 
         self.__server_adapters_manager = ServerAdaptersManager(
             telemetry_manager=create_telemetry_manager()
