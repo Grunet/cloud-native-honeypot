@@ -13,6 +13,10 @@ What is in scope for breaking changes includes
 
 ## Changes
 
+### v0.4.1
+
+- Make the logger no-op on exceptions
+
 ### v0.4.0
 
 - Add a health check route to the simple http server that doesn't publish an event to Eventbridge
