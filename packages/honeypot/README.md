@@ -2,6 +2,16 @@
 
 ## Contributing
 
+### Code Auto-Formatting
+
+Sometimes the `black` VS Code extension doesn't work on startup of a Codespace. If it doesn't seem to be auto-formatting on save try
+
+1. Disabling the extension
+2. Reloading the workspace
+3. Re-enabling the extension
+
+That seems to usually fix it.
+
 ### Dependency Management
 
 When adding a new pypi dependency, first add it to Poetry like 
