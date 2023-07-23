@@ -214,7 +214,9 @@ If not, create a Github issue to track it.
 
 #### Pypi dependencies
 
-TODO
+Dependabot should be configured to create monthly PRs for any dependencies out of date by a major version or more.
+
+However, these PRs should just be used as informational-only. The actual updates should be handcrafted in separate PRs (since requirements.txt has to be synchronized)
 
 ### Learning About and Taking Security Patches
 

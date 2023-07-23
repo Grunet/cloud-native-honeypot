@@ -9,3 +9,12 @@ updates:
         update-types:
           - "version-update:semver-minor"
           - "version-update:semver-patch"
+  - package-ecosystem: "pip"
+    directory: "/packages/honeypot/"
+    schedule:
+      interval: "monthly"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-minor"
+          - "version-update:semver-patch"
