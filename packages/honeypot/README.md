@@ -57,6 +57,7 @@ with the exceptions being
 
 - Python (latest minor version for Python 3 is the equivalent)
 - Well-known binaries (e.g. curl, jq, that don't strictly need their versions pinned as much)
+- Chainguard base images (staying on the latest images with a compatible Python version)
 
 The goals here are twofold
 
@@ -163,7 +164,24 @@ If not, create a Github issue to track it.
 
 #### Chainguard base images
 
-TODO
+The first step is to check if the latest Chainguard images contain a newer version of Python. You can figure this out by running the following commands
+
+```bash
+docker pull cgr.dev/chainguard/python:latest-dev
+docker run --entrypoint sh cgr.dev/chainguard/python:latest-dev -c "python --version"
+```
+
+If the version is newer than the one in use, go follow the steps in the [python section above](#python) first.
+
+If the version is the same, that means there's only updates to the rest of the base image to be taken.
+
+Follow these steps to update the base images
+
+1. Navigate to https://edu.chainguard.dev/chainguard/chainguard-images/reference/python/overview/
+2. Inspect the date of the latest images releases, and make sure it's not too recent (e.g. the same day)
+3. Copy the 2 digests from the page into their corresponding locations in the `Dockerfile`
+4. Smoke test the changes by running `make start-docker-simple-http` and `curl http://localhost:8000/`
+5. Update the changelog, the version, and cut a release
 
 #### 3rd Party Github Actions
 
