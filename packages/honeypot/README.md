@@ -220,4 +220,32 @@ However, these PRs should just be used as informational-only. The actual updates
 
 ### Learning About and Taking Security Patches
 
+Picking up security patches requires first learning about them in the first place. These are the strategies for doing that with the dependencies.
+
+#### Python
+
+A watch for releases and security alerts was turned on for https://github.com/python/cpython
+
+#### Poetry
+
+A watch for releases and security alerts was turned on for https://github.com/python-poetry/poetry
+
+#### Docker CLI
+
+A watch for releases and security alerts was turned on for https://github.com/moby/moby
+
+#### Chainguard base images
+
 TODO
+
+#### 3rd Party Github Actions
+
+Dependabot should be creating notices for these.
+
+#### Cosign
+
+A watch for releases and security alerts was turned on for https://github.com/sigstore/cosign
+
+#### Pypi dependencies
+
+Dependabot should be creating notices for these.
