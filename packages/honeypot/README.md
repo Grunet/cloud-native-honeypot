@@ -56,8 +56,8 @@ By default, the target for each area is
 with the exceptions being
 
 - Python (latest minor version for Python 3 is the equivalent)
-- Well-known binaries (e.g. curl, jq, that don't strictly need their versions pinned as much)
 - Chainguard base images (staying on the latest images with a compatible Python version)
+- Well-known binaries (e.g. curl, jq, that don't strictly need their versions pinned as much)
 
 The goals here are twofold
 
@@ -189,7 +189,26 @@ TODO
 
 #### Cosign
 
-TODO
+To find if there's a new major version available
+
+1. Navigate to https://github.com/sigstore/cosign/releases
+2. Search for the latest major version after the one in use in the repo (e.g. if the repo is using 2.1.1 search for 3.x.y)
+    - If you don't find it, there's nothing to do this time
+    - If you do find it, continue on
+
+Now that you've found the new major version, you'll need to try and update it in these locations
+
+- .github/workflow/release-honeypot.yaml
+
+If the action doesn't yet have support for the new version, there's nothing to do this time.
+
+If it does, then create a PR to
+
+1. Update the usage
+2. Update the changelog, the version, and cut a release
+3. Confirm that the signature continues to show up in Github Packages
+
+If not, create a Github issue to track it.
 
 #### Pypi dependencies
 
