@@ -46,7 +46,6 @@ The following is an overview of all the areas that may need patches and updates:
     - Pypi dependencies
     - Chainguard base images
     - Python version (in Dockerfile)
-    - Docker Compose version
 
 ### Maintenance Targets
 
@@ -58,7 +57,6 @@ with the exceptions being
 
 - Python (latest minor version for Python 3 is the equivalent)
 - Well-known binaries (e.g. curl, jq, that don't strictly need their versions pinned as much)
-- Docker Compose version (latest minor version is the equivalent)
 
 The goals here are twofold
 
@@ -162,10 +160,6 @@ If they all have it available, then create a PR to
 2. Update the changelog, but don't increment the version nor cut a release yet (since this is a dev-only change)
 
 If not, create a Github issue to track it.
-
-#### Docker Compose
-
-TODO
 
 #### Chainguard base images
 
