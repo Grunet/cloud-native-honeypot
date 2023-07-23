@@ -185,7 +185,9 @@ Follow these steps to update the base images
 
 #### 3rd Party Github Actions
 
-TODO
+Dependabot should be configured to create monthly PRs for any outdated actions, so just need to review and merge those in.
+
+It should be ignoring all (non-security) patch and minor updates, but in case it isn't this should be controllable on each PR that comes in (there should be an option to make it that way for each particular dependency).
 
 #### Cosign
 
