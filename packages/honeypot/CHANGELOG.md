@@ -15,6 +15,7 @@ What is in scope for breaking changes includes
 
 ### v0.4.1
 
+- Update Chainguard base images in the Dockerfile
 - Make the logger no-op on exceptions
 - Document maintenance and security patching strategy
 
