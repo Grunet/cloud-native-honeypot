@@ -26,7 +26,7 @@
 				"ms-vscode.makefile-tools",
 				"ms-python.black-formatter",
 				"ms-python.flake8",
-				"bungcip.better-toml",
+				"tamasfe.even-better-toml",
 				"redhat.vscode-yaml"
 			],
 			"settings": {
