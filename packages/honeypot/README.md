@@ -246,7 +246,7 @@ A watch for releases and security alerts was turned on for https://github.com/mo
 
 #### Chainguard base images
 
-(Asked about this at https://twitter.com/__grunet/status/1683241030932471808)
+New base images are being checked for daily by the [Check for Updated Dependencies](../../.github/workflows/check-for-updated-dependencies.yaml) Github Workflow
 
 #### 3rd Party Github Actions
 

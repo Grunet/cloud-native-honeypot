@@ -1,0 +1,18 @@
+name: Check for Updated Dependencies
+on:
+  schedule:
+    - cron: "0 0 * * *" # Daily at midnight
+  workflow_dispatch:
+
+# Note: I should receive an email notification when this workflow fails since I last modified it and the cron. Can generalize as needed (e.g. to creating a Github issue)
+
+jobs:
+  chainguard-images:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check overview page
+        run: |
+          curl https://edu.chainguard.dev/chainguard/chainguard-images/reference/python/overview/ | grep sha256:1d681e94835cb783dd717425aa8dff766148bcd6cee0417b8d3a746f0201dd6d
+
+      # If this fails, that likely means the "latest" and "latest-dev" tags for Python are pointing at new images with new digests
+      # Follow the process to update the Dockerfiles accordingly, then update the hardcoded digest here to be one of the new digests (doesn't matter which one) to detect future changes
