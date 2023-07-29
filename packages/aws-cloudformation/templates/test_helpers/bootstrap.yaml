@@ -48,3 +48,15 @@ Resources:
       RouteTableId: !Ref RouteTable
       DestinationCidrBlock: "0.0.0.0/0"
       NatGatewayId: !Ref NATGateway
+
+  Bastion:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: /aws/service/ami-amazon-linux-latest/al2023-ami-minimal-kernel-default-x86_64
+      InstanceType: "t2.nano"
+      SecurityGroupIds: SecurityGroupIds
+      SecurityGroups: SecurityGroups
+      SubnetId: !Ref Subnet
+      Tags:
+        - Key: test-bootstrap
+          Value: true
