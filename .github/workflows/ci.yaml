@@ -59,3 +59,24 @@ jobs:
       - name: Smoke Tests - Server Shutdown
         run: |
           make stop-docker-simple-http
+
+  aws-cloudformation:
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: packages/aws-cloudformation/
+    steps:
+      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Check pip version
+        # TODO - enforce this
+        run: |
+          pip --version
+
+      - name: Install cfn-lint
+        run: |
+          pip install cfn-lint=='0.79.5'
+
+      - name: Lint
+        run: |
+          make lint
