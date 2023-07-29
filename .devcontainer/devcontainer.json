@@ -27,7 +27,9 @@
 				"ms-python.black-formatter",
 				"ms-python.flake8",
 				"tamasfe.even-better-toml",
-				"redhat.vscode-yaml"
+				"redhat.vscode-yaml",
+				"kddejong.vscode-cfn-lint",
+				"dannysteenman.cloudformation-yaml-snippets"
 			],
 			"settings": {
 				"editor.formatOnSave": true,
