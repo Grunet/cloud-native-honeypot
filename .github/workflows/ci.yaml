@@ -81,5 +81,4 @@ jobs:
 
       - name: Lint
         run: |
-          shopt -s globstar # enable globbing
           make lint
