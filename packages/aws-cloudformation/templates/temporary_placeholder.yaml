@@ -1,0 +1,9 @@
+# This is only here so cfn-lint has something to pass on (otherwise it will error out)
+# This should eventually be removed
+
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  LogicalID:
+    Type: AWS::S3::Bucket
+    # Properties:
