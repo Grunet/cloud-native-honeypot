@@ -107,8 +107,8 @@ Resources:
   Bastion:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-0f462f8e997b10a20 # al2023-ami-minimal-2023.1.20230725.0-kernel-6.1-x86_64
-      InstanceType: "t2.nano"
+      ImageId: ami-05458327a632d18bb # al2023-ami-minimal-2023.1.20230725.0-kernel-6.1-arm64
+      InstanceType: "t4g.nano"
       SecurityGroupIds:
         - !GetAtt SGEgressFullAccess.GroupId
       SubnetId: !Ref PrivateSubnet
