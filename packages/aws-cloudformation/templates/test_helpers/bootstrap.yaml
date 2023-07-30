@@ -5,7 +5,7 @@ Resources:
   VPC:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: 10.0.0.0/28
+      CidrBlock: 10.0.0.0/27
       InstanceTenancy: "default"
       Tags:
         - Key: bootstrap
@@ -39,10 +39,10 @@ Resources:
       GatewayId: !Ref IGW
       RouteTableId: !Ref RouteTable
 
-  Subnet:
+  PublicSubnet:
     Type: AWS::EC2::Subnet
     Properties:
-      CidrBlock: 10.0.0.0/28
+      CidrBlock: 10.0.0.16/28
       Tags:
         - Key: bootstrap
           Value: true
@@ -52,7 +52,7 @@ Resources:
     Type: AWS::EC2::NatGateway
     Properties:
       AllocationId: !GetAtt NATGatewayEIP.AllocationId
-      SubnetId: !Ref Subnet
+      SubnetId: !Ref PublicSubnet
       Tags:
         - Key: bootstrap
           Value: true
@@ -69,6 +69,15 @@ Resources:
       NatGatewayId: !Ref NATGateway
       RouteTableId: !Ref RouteTable
 
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.0.0/28
+      Tags:
+        - Key: bootstrap
+          Value: true
+      VpcId: !Ref VPC
+
   Bastion:
     Type: AWS::EC2::Instance
     Properties:
@@ -76,7 +85,7 @@ Resources:
       InstanceType: "t2.nano"
       SecurityGroupIds:
         - !GetAtt SGEgressFullAccess.GroupId
-      SubnetId: !Ref Subnet
+      SubnetId: !Ref PrivateSubnet
       Tags:
         - Key: bootstrap
           Value: true
