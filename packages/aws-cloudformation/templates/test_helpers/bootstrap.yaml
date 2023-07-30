@@ -52,7 +52,7 @@ Resources:
   Bastion:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-amazon-linux-latest/al2023-ami-minimal-kernel-default-x86_64
+      ImageId: ami-0f462f8e997b10a20 # al2023-ami-minimal-2023.1.20230725.0-kernel-6.1-x86_64
       InstanceType: "t2.nano"
       SecurityGroupIds:
         - !GetAtt SGEgressFullAccess.GroupId
