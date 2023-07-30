@@ -148,7 +148,7 @@ Resources:
               Service:
                 - ec2.amazonaws.com
             Action: sts:AssumeRole
-      Description: Role enabling SSM-ing into the bastion instance
+      Description: Attach to an EC2 instance profile to enable SSM-ing into the instance
       Policies:
         - PolicyName: ssm-policy
           PolicyDocument:
