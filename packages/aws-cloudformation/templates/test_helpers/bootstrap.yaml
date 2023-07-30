@@ -153,7 +153,7 @@ Resources:
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
-              # Least permissioned according to https://www.nebulaworks.com/insights/posts/aws-ssm-session-manager/
+              # Taken from https://docs.aws.amazon.com/systems-manager/latest/userguide/getting-started-create-iam-instance-profile.html
               - Effect: Allow
                 Action:
                   - ssmmessages:CreateDataChannel
