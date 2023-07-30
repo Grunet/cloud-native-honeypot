@@ -163,7 +163,6 @@ Resources:
                   - ssmmessages:OpenControlChannel
                   - ssm:UpdateInstanceInformation
                 Resource: "*"
-      RoleName: bastion-role
       Tags:
         - Key: bootstrap
           Value: true
