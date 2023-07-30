@@ -11,18 +11,38 @@ Resources:
         - Key: bootstrap
           Value: true
 
-  Subnet:
-    Type: AWS::EC2::Subnet
+  RouteTable:
+    Type: AWS::EC2::RouteTable
     Properties:
-      CidrBlock: 10.0.0.0/28
       Tags:
         - Key: bootstrap
           Value: true
       VpcId: !Ref VPC
 
-  RouteTable:
-    Type: AWS::EC2::RouteTable
+  IGW:
+    Type: AWS::EC2::InternetGateway
     Properties:
+      Tags:
+        - Key: bootstrap
+          Value: true
+
+  AttachIGW:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref IGW
+
+  RouteIGW:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref IGW
+      RouteTableId: !Ref RouteTable
+
+  Subnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.0.0/28
       Tags:
         - Key: bootstrap
           Value: true
@@ -45,9 +65,9 @@ Resources:
   RouteNATGateway:
     Type: AWS::EC2::Route
     Properties:
-      RouteTableId: !Ref RouteTable
       DestinationCidrBlock: "0.0.0.0/0"
       NatGatewayId: !Ref NATGateway
+      RouteTableId: !Ref RouteTable
 
   Bastion:
     Type: AWS::EC2::Instance
