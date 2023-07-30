@@ -133,7 +133,6 @@ Resources:
   InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
-      InstanceProfileName: bastion-instance-profile
       Roles:
         - !Ref InstanceProfileRole
 
