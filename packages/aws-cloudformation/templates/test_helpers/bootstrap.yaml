@@ -8,7 +8,7 @@ Resources:
       CidrBlock: 10.0.0.0/28
       InstanceTenancy: "default"
       Tags:
-        - Key: test-bootstrap
+        - Key: bootstrap
           Value: true
 
   Subnet:
@@ -16,7 +16,7 @@ Resources:
     Properties:
       CidrBlock: 10.0.0.0/28
       Tags:
-        - Key: test-bootstrap
+        - Key: bootstrap
           Value: true
       VpcId: !Ref VPC
 
@@ -24,7 +24,7 @@ Resources:
     Type: AWS::EC2::RouteTable
     Properties:
       Tags:
-        - Key: test-bootstrap
+        - Key: bootstrap
           Value: true
       VpcId: !Ref VPC
 
@@ -34,7 +34,7 @@ Resources:
       AllocationId: !GetAtt NATGatewayEIP.AllocationId
       SubnetId: !Ref Subnet
       Tags:
-        - Key: test-bootstrap
+        - Key: bootstrap
           Value: true
 
   NATGatewayEIP:
@@ -54,9 +54,22 @@ Resources:
     Properties:
       ImageId: /aws/service/ami-amazon-linux-latest/al2023-ami-minimal-kernel-default-x86_64
       InstanceType: "t2.nano"
-      SecurityGroupIds: SecurityGroupIds
-      SecurityGroups: SecurityGroups
+      SecurityGroupIds: 
+        - !GetAtt SGEgressFullAccess.GroupId
       SubnetId: !Ref Subnet
       Tags:
-        - Key: test-bootstrap
+        - Key: bootstrap
           Value: true
+
+  SGEgressFullAccess:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allows all egress traffic
+      GroupName: egress-full-access
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: -1
+      Tags:
+        - Key: bootstrap
+          Value: true
+      VpcId: !Ref VPC
