@@ -1,0 +1,155 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  A VPC and an instance to test other infrastructure inside of
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/27
+      InstanceTenancy: "default"
+      Tags:
+        - Key: bootstrap
+          Value: true
+
+  # Public subnet
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.0.16/28 # Half of the VPC's ip addresses
+      Tags:
+        - Key: bootstrap
+          Value: true
+      VpcId: !Ref VPC
+
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: bootstrap
+          Value: true
+      VpcId: !Ref VPC
+
+  IGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: bootstrap
+          Value: true
+
+  AttachIGW:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref IGW
+
+  RouteIGW:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref IGW
+      RouteTableId: !Ref PublicRouteTable
+
+  # Public and private subnet
+
+  NATGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NATGatewayEIP.AllocationId
+      SubnetId: !Ref PublicSubnet
+      Tags:
+        - Key: bootstrap
+          Value: true
+
+  NATGatewayEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  RouteNATGateway:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref NATGateway
+      RouteTableId: !Ref PrivateRouteTable
+
+  # Private subnet
+
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.0.0/28 # Half of the VPC's ip addresses
+      Tags:
+        - Key: bootstrap
+          Value: true
+      VpcId: !Ref VPC
+
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: bootstrap
+          Value: true
+      VpcId: !Ref VPC
+
+  PrivateSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateSubnet
+
+  Bastion:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0f462f8e997b10a20 # al2023-ami-minimal-2023.1.20230725.0-kernel-6.1-x86_64
+      IamInstanceProfile: !Ref InstanceProfile
+      InstanceType: "t2.nano"
+      SecurityGroupIds:
+        - !GetAtt SGEgressFullAccess.GroupId
+      SubnetId: !Ref PrivateSubnet
+      Tags:
+        - Key: bootstrap
+          Value: true
+
+  SGEgressFullAccess:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allows all egress traffic
+      GroupName: egress-full-access
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: -1
+      Tags:
+        - Key: bootstrap
+          Value: true
+      VpcId: !Ref VPC
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref InstanceProfileRole
+
+  InstanceProfileRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Description: Attach to an EC2 instance profile to enable SSM-ing into the instance
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Tags:
+        - Key: bootstrap
+          Value: true
