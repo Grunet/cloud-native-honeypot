@@ -148,20 +148,8 @@ Resources:
                 - ec2.amazonaws.com
             Action: sts:AssumeRole
       Description: Attach to an EC2 instance profile to enable SSM-ing into the instance
-      Policies:
-        - PolicyName: ssm-policy
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              # Taken from https://docs.aws.amazon.com/systems-manager/latest/userguide/getting-started-create-iam-instance-profile.html
-              - Effect: Allow
-                Action:
-                  - ssmmessages:CreateDataChannel
-                  - ssmmessages:OpenDataChannel
-                  - ssmmessages:CreateControlChannel
-                  - ssmmessages:OpenControlChannel
-                  - ssm:UpdateInstanceInformation
-                Resource: "*"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
       Tags:
         - Key: bootstrap
           Value: true
