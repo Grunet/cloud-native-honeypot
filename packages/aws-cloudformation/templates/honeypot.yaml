@@ -76,6 +76,8 @@ Resources:
           Value: true
       TaskRoleArn: # TODO - fill this out
 
+
+  # TODO - figure out how a custom log group fits into this
 # Transform:
 
 # Outputs:
