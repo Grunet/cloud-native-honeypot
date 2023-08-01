@@ -16,6 +16,10 @@ Resources:
   PublicSubnet:
     Type: AWS::EC2::Subnet
     Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
       CidrBlock: 10.0.0.16/28 # Half of the VPC's ip addresses
       Tags:
         - Key: bootstrap
@@ -84,6 +88,10 @@ Resources:
   PrivateSubnet:
     Type: AWS::EC2::Subnet
     Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
       CidrBlock: 10.0.0.0/28 # Half of the VPC's ip addresses
       Tags:
         - Key: bootstrap
