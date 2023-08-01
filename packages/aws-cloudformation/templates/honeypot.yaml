@@ -2,8 +2,13 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: |
   Resources for deploying the cloud native honeypot
 Parameters:
+  VpcId:
+    AllowedPattern: ".+" # Makes it Required
+    Description: The VPC to place the honeypot service in
+    Type: String
+
   SubnetId:
-    AllowedPattern: ".+" # Required
+    AllowedPattern: ".+" # Makes it Required
     Description: The subnet to place the honeypot service in
     Type: String
 
@@ -34,7 +39,7 @@ Resources:
         AwsvpcConfiguration:
           AssignPublicIp: DISABLED
           SecurityGroups:
-            - String # TODO - reference the security group here
+            - !Ref SGIngressFullAccess
           Subnets:
             - !Ref SubnetId
       PlatformVersion: 1.4.0
@@ -44,8 +49,17 @@ Resources:
           Value: true
       TaskDefinition: "String" # TODO - fill out the task definition here
 
-
-  #TODO - make a security group that's wide open for ingress
+  SGIngressFullAccess:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allows all ingress traffic from within the VPC
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0 # Allow anything in the VPC to hit the honeypot
+          IpProtocol: -1
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+      VpcId: !Ref VpcId
 # Transform:
 
 # Outputs:
