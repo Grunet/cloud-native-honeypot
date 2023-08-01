@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  Resources for deploying the cloud native honeypot
+# Parameters:
+# Metadata:
+
+# Mappings:
+
+# Conditions:
+
+Resources:
+  # TODO - allow for injecting an ECS cluster identifier instead
+
+  Cluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+# Transform:
+
+# Outputs:
