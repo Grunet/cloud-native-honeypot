@@ -5,3 +5,4 @@ services:
       - ENABLE_SERVER_SIMPLE_HTTP=true
     ports:
       - "8000:8000"
+    read_only: true
