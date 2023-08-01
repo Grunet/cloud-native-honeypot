@@ -1,7 +1,12 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: |
   Resources for deploying the cloud native honeypot
-# Parameters:
+Parameters:
+  SubnetId:
+    AllowedPattern: ".+" # Required
+    Description: The subnet to place the honeypot service in
+    Type: String
+
 # Metadata:
 
 # Mappings:
@@ -17,6 +22,30 @@ Resources:
       Tags:
         - Key: cloud-native-honeypot
           Value: true
+
+  Service:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref Cluster
+      DesiredCount: 1
+      EnableECSManagedTags: true
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - String # TODO - reference the security group here
+          Subnets:
+            - !Ref SubnetId
+      PlatformVersion: 1.4.0
+      PropagateTags: SERVICE
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+      TaskDefinition: "String" # TODO - fill out the task definition here
+
+
+  #TODO - make a security group that's wide open for ingress
 # Transform:
 
 # Outputs:
