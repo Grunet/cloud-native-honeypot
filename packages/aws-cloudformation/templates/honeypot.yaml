@@ -77,14 +77,13 @@ Resources:
           ReadonlyRootFilesystem: true
       Cpu: 256
       Memory: 512
-      ExecutionRoleArn: # TODO - fill this out
+      ExecutionRoleArn: # TODO - fill this out, needs logging permissions
       Family: cloud-native-honeypot # TODO - review if this is appropriate
       NetworkMode: awsvpc
       Tags:
         - Key: cloud-native-honeypot
           Value: true
-      TaskRoleArn: # TODO - fill this out
-
+      # TaskRoleArn: # fill this out when integrating with EventBridge
 # Transform:
 
 # Outputs:
