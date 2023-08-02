@@ -36,6 +36,8 @@ Conditions:
   CreateNewLogGroup: !Equals [!Ref LogGroupName, ""]
 
 Resources:
+  # ECS
+
   Cluster:
     Type: AWS::ECS::Cluster
     Condition: CreateNewCluster
@@ -88,6 +90,12 @@ Resources:
         - Environment:
             - Name: ENABLE_SERVER_SIMPLE_HTTP
               Value: true
+            - Name: ENABLE_EVENT_CLIENT_EVENTBRIDGE
+              Value: true
+            - Name: AWS_DEFAULT_REGION
+              Value: !Ref AWS::Region
+            - Name: EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN
+              Value: !Ref EventBus
           Image: ghcr.io/grunet/cloud-native-honeypot:v0.4.2
           LogConfiguration:
             LogDriver: awslogs
@@ -144,6 +152,25 @@ Resources:
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
                 Resource: arn:aws:logs:*:*:*
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+
+  # EventBridge
+
+  EventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      # Cloudformation won't autogenerate a name for this, so this works around it by incorporating the last part of the stack id
+      # This keeps it so that the stack can be created multiple times in the same region
+      Name:
+        !Join [
+          "-",
+          [
+            "cloud-native-honeypot-bus",
+            !Select [2, !Split ["/", !Ref AWS::StackId]],
+          ],
+        ]
       Tags:
         - Key: cloud-native-honeypot
           Value: true
