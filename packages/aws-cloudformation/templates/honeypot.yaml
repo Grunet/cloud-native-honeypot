@@ -86,7 +86,7 @@ Resources:
           ReadonlyRootFilesystem: true
       Cpu: 256
       Memory: 512
-      ExecutionRoleArn: # TODO - fill this out, needs logging permissions
+      ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
       Family: cloud-native-honeypot # TODO - review if this is appropriate
       NetworkMode: awsvpc
       Tags:
@@ -98,6 +98,34 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       RetentionInDays: !Ref LogRetentionInDays
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Description: Allows cloud-native-honeypot task to write to CloudWatch Logs
+      Policies:
+        - PolicyName: logs-access
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource:
+                  - !GetAtt LogGroup.Arn
+                  - !Sub "${LogGroup.Arn}:*"
       Tags:
         - Key: cloud-native-honeypot
           Value: true
