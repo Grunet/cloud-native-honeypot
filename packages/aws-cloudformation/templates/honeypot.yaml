@@ -176,4 +176,13 @@ Resources:
           Value: true
 # Transform:
 
-# Outputs:
+Outputs:
+  # Deliberately avoiding cross-stack references here to always keep it easy to delete this stack
+
+  EventBusName:
+    Description: The name of the event bus associated with the honeypot service
+    Value: !GetAtt EventBus.Name
+
+  EventBusArn:
+    Description: The ARN of the event bus associated with the honeypot service
+    Value: !GetAtt EventBus.Arn
