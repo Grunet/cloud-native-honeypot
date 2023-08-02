@@ -193,7 +193,7 @@ Resources:
 Outputs:
   # Deliberately avoiding cross-stack references or SSM parameters-as-output here to allow this stack to be created multiple times in a region
 
-  # Best usage should come from making this part of a shallow nested stack, with the parent stack building on top of the event bus defined here
+  # Best usage should come from making this part of a shallow nested stack, with the parent stack building on top of the event bus outputs below
 
   EventBusName:
     Description: The name of the event bus associated with the honeypot service
