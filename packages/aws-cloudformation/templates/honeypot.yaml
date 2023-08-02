@@ -12,6 +12,11 @@ Parameters:
     Description: The subnet to place the honeypot service in
     Type: String
 
+  LogRetentionInDays:
+    Description: The number of days to retain logs emitted by the honeypot service
+    Type: Number
+    Default: 7
+
 # Metadata:
 
 # Mappings:
@@ -69,7 +74,12 @@ Resources:
             - Name: ENABLE_SERVER_SIMPLE_HTTP
               Value: true
           Image: ghcr.io/grunet/cloud-native-honeypot:v0.4.2
-          LogConfiguration: # TODO - see https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_LogConfiguration.html this will involve the custom log group
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: cloud-native-honeypot
           Name: cloud-native-honeypot
           PortMappings:
             - ContainerPort: 8000
@@ -83,6 +93,14 @@ Resources:
         - Key: cloud-native-honeypot
           Value: true
       # TaskRoleArn: # fill this out when integrating with EventBridge
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: !Ref LogRetentionInDays
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
 # Transform:
 
 # Outputs:
