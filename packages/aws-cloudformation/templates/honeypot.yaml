@@ -12,6 +12,11 @@ Parameters:
     Description: The subnet to place the honeypot service in
     Type: String
 
+  ClusterNameOrArn:
+    Description: The name or ARN of an existing ECS cluster the honeypot service should be added to
+    Type: String
+    Default: ""
+
   LogRetentionInDays:
     Description: The number of days to retain logs emitted by the honeypot service
     Type: Number
@@ -21,13 +26,13 @@ Parameters:
 
 # Mappings:
 
-# Conditions:
+Conditions:
+  CreateNewCluster: !Equals [!Ref ClusterNameOrArn, ""]
 
 Resources:
-  # TODO - allow for injecting an ECS cluster identifier instead
-
   Cluster:
     Type: AWS::ECS::Cluster
+    Condition: CreateNewCluster
     Properties:
       Tags:
         - Key: cloud-native-honeypot
@@ -36,7 +41,11 @@ Resources:
   Service:
     Type: AWS::ECS::Service
     Properties:
-      Cluster: !Ref Cluster
+      Cluster:
+        Fn::If:
+          - CreateNewCluster
+          - !Ref Cluster
+          - !Ref ClusterNameOrArn
       DesiredCount: 1
       EnableECSManagedTags: true
       LaunchType: FARGATE
