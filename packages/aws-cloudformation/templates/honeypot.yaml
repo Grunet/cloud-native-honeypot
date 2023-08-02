@@ -68,7 +68,6 @@ Resources:
         - Environment:
             - Name: ENABLE_SERVER_SIMPLE_HTTP
               Value: true
-          HealthCheck: # TODO - see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-taskdefinition-healthcheck.html
           Image: ghcr.io/grunet/cloud-native-honeypot:v0.4.2
           LogConfiguration: # TODO - see https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_LogConfiguration.html this will involve the custom log group
           Name: cloud-native-honeypot
