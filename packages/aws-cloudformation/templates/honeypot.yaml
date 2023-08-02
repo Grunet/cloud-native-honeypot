@@ -13,12 +13,17 @@ Parameters:
     Type: String
 
   ClusterNameOrArn:
-    Description: The name or ARN of an existing ECS cluster the honeypot service should be added to
+    Description: The name or ARN of an existing ECS cluster the honeypot service should be added to (instead of creating a new cluster)
+    Type: String
+    Default: ""
+
+  LogGroupName:
+    Description: The name of an existing CloudWatch log group the honeypot service's logs should be added to (instead of creating a new log group)
     Type: String
     Default: ""
 
   LogRetentionInDays:
-    Description: The number of days to retain logs emitted by the honeypot service
+    Description: The number of days to retain logs emitted by the honeypot service (only applies if the stack creates a new log group)
     Type: Number
     Default: 7
 
@@ -28,6 +33,7 @@ Parameters:
 
 Conditions:
   CreateNewCluster: !Equals [!Ref ClusterNameOrArn, ""]
+  CreateNewLogGroup: !Equals [!Ref LogGroupName, ""]
 
 Resources:
   Cluster:
@@ -86,7 +92,11 @@ Resources:
           LogConfiguration:
             LogDriver: awslogs
             Options:
-              awslogs-group: !Ref LogGroup
+              awslogs-group:
+                Fn::If:
+                  - CreateNewLogGroup
+                  - !Ref LogGroup
+                  - !Ref LogGroupName
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: cloud-native-honeypot
           Name: cloud-native-honeypot
@@ -105,6 +115,7 @@ Resources:
 
   LogGroup:
     Type: AWS::Logs::LogGroup
+    Condition: CreateNewLogGroup
     Properties:
       RetentionInDays: !Ref LogRetentionInDays
       Tags:
@@ -132,9 +143,7 @@ Resources:
                 Action:
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
-                Resource:
-                  - !GetAtt LogGroup.Arn
-                  - !Sub "${LogGroup.Arn}:*"
+                Resource: arn:aws:logs:*:*:*
       Tags:
         - Key: cloud-native-honeypot
           Value: true
