@@ -145,7 +145,8 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - logs:CreateLogStream
+                  - logs:CreateLogStream # Calls on both the log group and log stream as resources, hence both resources being present together
+                  - logs:PutLogEvents
                 Resource:
                   - !Sub
                     - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}
@@ -154,10 +155,6 @@ Resources:
                           - CreateNewLogGroup
                           - !Ref LogGroup
                           - !Ref LogGroupName
-              - Effect: Allow
-                Action:
-                  - logs:PutLogEvents
-                Resource:
                   - !Sub
                     - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}:log-stream:*
                     - NameOfChosenLogGroup:
@@ -165,7 +162,6 @@ Resources:
                           - CreateNewLogGroup
                           - !Ref LogGroup
                           - !Ref LogGroupName
-
       Tags:
         - Key: cloud-native-honeypot
           Value: true
