@@ -35,7 +35,8 @@ class TelemetryManager(TelemetryManagerProtocol):
             # Some exceptions are not json serializable as is
             cloned_data["exception"] = str(cloned_data["exception"])
 
-        data_as_json = json.dumps(cloned_data, indent=4, sort_keys=True)
+        # Can instead pretty print the JSON behind a development env var if needed
+        data_as_json = json.dumps(cloned_data, sort_keys=True)
 
         sys.stdout.write(data_as_json)
         sys.stdout.write("\n")

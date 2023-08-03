@@ -13,6 +13,10 @@ What is in scope for breaking changes includes
 
 ## Changes
 
+### v0.4.3
+
+- Keep log lines onto 1 single line (i.e. don't pretty print them) so they match what Fargate's expecting
+
 ### v0.4.2
 
 - Update Chainguard base images in the Dockerfile
