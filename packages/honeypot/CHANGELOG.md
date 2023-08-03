@@ -13,9 +13,12 @@ What is in scope for breaking changes includes
 
 ## Changes
 
-### (Unreleased)
+### v0.4.4
+
+- Update Chainguard base images in the Dockerfile
 
 - Re-install moto (dev dependencies) to fix vulnerability alerts about 2 of its direct/transitive dependencies (certifi, cryptography)
+- Update Docker version used locally (Codespaces) and CI (Github Workflows)
 
 ### v0.4.3
 

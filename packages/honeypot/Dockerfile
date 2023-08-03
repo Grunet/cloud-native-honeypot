@@ -1,7 +1,7 @@
 # Adapted from https://edu.chainguard.dev/chainguard/chainguard-images/reference/python/overview/#usage
 
 # Python 3.11.4, dev base image. See https://www.chainguard.dev/unchained/a-guide-on-how-to-use-chainguard-images-for-public-catalog-tier-users for more details on how to update this
-FROM cgr.dev/chainguard/python@sha256:689b066a0c3a20589e3fce2921cb539ac1b9a9a43f30ae83491e540613aaa53a as builder
+FROM cgr.dev/chainguard/python@sha256:3b28a1b0635d0dfa88aac767bc9df52807a13d62501b7f77e297e3b97dd84713 as builder
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt --user
 
 # Python 3.11.4, production base image. See https://www.chainguard.dev/unchained/a-guide-on-how-to-use-chainguard-images-for-public-catalog-tier-users for more details on how to update this
-FROM cgr.dev/chainguard/python@sha256:2b0426aff71001b9dc34723cc407cddca8ca88628a44ed5e2d484efd2cf22009 
+FROM cgr.dev/chainguard/python@sha256:8a9cfbc08aa85649e8822003fdef85c0eba03c5a138601fd25c1a0c2987382a2 
 
 # Make sure you update Python version in path
 COPY --from=builder /home/nonroot/.local/lib/python3.11/site-packages /home/nonroot/.local/lib/python3.11/site-packages
