@@ -1,0 +1,71 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  A rule to pipe EventBridge bus events to CloudWatch logs
+Parameters:
+  EventBusName:
+    AllowedPattern: ".+" # Makes it Required
+    Description: (Required) The name of the event bus source
+    Type: String
+
+Resources:
+  # Adapted from https://serverlessland.com/patterns/eventbridge-cloudwatch
+
+  LogsRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Pipes honeypot events to CloudWatch logs
+      EventBusName: !Ref EventBusName
+      EventPattern:
+        source:
+          - cloud-native-honeypot
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt LogGroupForEvents.Arn
+          Id: LogTarget
+
+  LogGroupForEvents:
+    Type: AWS::Logs::LogGroup
+
+  LogGroupForEventsPolicy:
+    Type: AWS::Logs::ResourcePolicy
+    Properties:
+      PolicyName: EventBridgeToCWLogsPolicy
+      PolicyDocument: !Sub >
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "EventBridgetoCWLogsCreateLogStreamPolicy",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "events.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "logs:CreateLogStream"
+              ],
+              "Resource": [
+                "${LogGroupForEvents.Arn}"
+              ]
+            },
+            {
+              "Sid": "EventBridgetoCWLogsPutLogEventsPolicy",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "events.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "logs:PutLogEvents"
+              ],
+              "Resource": [
+                "${LogGroupForEvents.Arn}"
+              ],
+              "Condition": {
+                "ArnEquals": {"AWS:SourceArn": "${LogsRule.Arn}"}
+              }
+            }
+          ]
+        }
