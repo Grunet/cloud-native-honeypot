@@ -13,6 +13,10 @@ What is in scope for breaking changes includes
 
 ## Changes
 
+### (Unreleased)
+
+- Re-install moto (dev dependencies) to fix vulnerability alerts about 2 of its direct/transitive dependencies (certifi, cryptography)
+
 ### v0.4.3
 
 - Keep log lines onto 1 single line (i.e. don't pretty print them) so they match what Fargate's expecting
