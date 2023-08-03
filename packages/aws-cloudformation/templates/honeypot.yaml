@@ -150,8 +150,26 @@ Resources:
               - Effect: Allow
                 Action:
                   - logs:CreateLogStream
+                Resource:
+                  - !Sub
+                    - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}
+                    - NameOfChosenLogGroup:
+                        Fn::If:
+                          - CreateNewLogGroup
+                          - !Ref LogGroup
+                          - !Ref LogGroupName
+              - Effect: Allow
+                Action:
                   - logs:PutLogEvents
-                Resource: arn:aws:logs:*:*:*
+                Resource:
+                  - !Sub
+                    - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}:log-stream:*
+                    - NameOfChosenLogGroup:
+                        Fn::If:
+                          - CreateNewLogGroup
+                          - !Ref LogGroup
+                          - !Ref LogGroupName
+
       Tags:
         - Key: cloud-native-honeypot
           Value: true
