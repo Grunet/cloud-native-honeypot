@@ -27,10 +27,6 @@ Parameters:
     Type: Number
     Default: 7
 
-# Metadata:
-
-# Mappings:
-
 Conditions:
   CreateNewCluster: !Equals [!Ref ClusterNameOrArn, ""]
   CreateNewLogGroup: !Equals [!Ref LogGroupName, ""]
@@ -218,8 +214,6 @@ Resources:
       Tags:
         - Key: cloud-native-honeypot
           Value: true
-
-# Transform:
 
 Outputs:
   # Deliberately avoiding cross-stack references or SSM parameters-as-output here to allow this stack to be created multiple times in a region
