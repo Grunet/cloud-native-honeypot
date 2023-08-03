@@ -1,0 +1,225 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  Resources for deploying the cloud native honeypot
+Parameters:
+  VpcId:
+    AllowedPattern: ".+" # Makes it Required
+    Description: (Required) The VPC to place the honeypot service in
+    Type: String
+
+  SubnetId:
+    AllowedPattern: ".+" # Makes it Required
+    Description: (Required) The subnet to place the honeypot service in
+    Type: String
+
+  ClusterNameOrArn:
+    Description: The name or ARN of an existing ECS cluster the honeypot service should be added to (instead of creating a new cluster)
+    Type: String
+    Default: ""
+
+  LogGroupName:
+    Description: The name of an existing CloudWatch log group the honeypot service's logs should be added to (instead of creating a new log group)
+    Type: String
+    Default: ""
+
+  LogRetentionInDays:
+    Description: The number of days to retain logs emitted by the honeypot service (only applies if the stack creates a new log group)
+    Type: Number
+    Default: 7
+
+Conditions:
+  CreateNewCluster: !Equals [!Ref ClusterNameOrArn, ""]
+  CreateNewLogGroup: !Equals [!Ref LogGroupName, ""]
+
+Resources:
+  # ECS
+
+  Cluster:
+    Type: AWS::ECS::Cluster
+    Condition: CreateNewCluster
+    Properties:
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+
+  Service:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster:
+        Fn::If:
+          - CreateNewCluster
+          - !Ref Cluster
+          - !Ref ClusterNameOrArn
+      DesiredCount: 1
+      EnableECSManagedTags: true
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - !Ref SGIngressFullAccess
+          Subnets:
+            - !Ref SubnetId
+      PlatformVersion: 1.4.0
+      PropagateTags: SERVICE
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+      TaskDefinition: !Ref TaskDefinition
+
+  SGIngressFullAccess:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allows all ingress traffic from within the VPC
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0 # Allow anything in the VPC to hit the honeypot
+          IpProtocol: -1
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+      VpcId: !Ref VpcId
+
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Environment:
+            - Name: ENABLE_SERVER_SIMPLE_HTTP
+              Value: true
+            - Name: ENABLE_EVENT_CLIENT_EVENTBRIDGE
+              Value: true
+            - Name: AWS_DEFAULT_REGION
+              Value: !Ref AWS::Region
+            - Name: EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN
+              Value: !Ref EventBus
+          Image: ghcr.io/grunet/cloud-native-honeypot:v0.4.2
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Fn::If:
+                  - CreateNewLogGroup
+                  - !Ref LogGroup
+                  - !Ref LogGroupName
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: cloud-native-honeypot
+          Name: cloud-native-honeypot
+          PortMappings:
+            - ContainerPort: 8000
+          ReadonlyRootFilesystem: true
+      Cpu: 256
+      Memory: 512
+      ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+      Family: cloud-native-honeypot # TODO - review if this is appropriate
+      NetworkMode: awsvpc
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+      TaskRoleArn: !GetAtt TaskRole.Arn
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Condition: CreateNewLogGroup
+    Properties:
+      RetentionInDays: !Ref LogRetentionInDays
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Description: Allows cloud-native-honeypot task to write to CloudWatch Logs
+      Policies:
+        - PolicyName: logs-access
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogStream # Calls on both the log group and log stream as resources, hence both resources being present together
+                  - logs:PutLogEvents
+                Resource:
+                  - !Sub
+                    - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}
+                    - NameOfChosenLogGroup:
+                        Fn::If:
+                          - CreateNewLogGroup
+                          - !Ref LogGroup
+                          - !Ref LogGroupName
+                  - !Sub
+                    - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}:log-stream:*
+                    - NameOfChosenLogGroup:
+                        Fn::If:
+                          - CreateNewLogGroup
+                          - !Ref LogGroup
+                          - !Ref LogGroupName
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Description: Allows cloud-native-honeypot task to publish events to EventBridge
+      Policies:
+        - PolicyName: events-access
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - events:PutEvents
+                Resource:
+                  - !GetAtt EventBus.Arn
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+
+  # EventBridge
+
+  EventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      # Cloudformation won't autogenerate a name for this, so this works around it by incorporating the last part of the stack id
+      # This keeps it so that the stack can be created multiple times in the same region
+      Name:
+        !Join [
+          "-",
+          [
+            "cloud-native-honeypot-bus",
+            !Select [2, !Split ["/", !Ref AWS::StackId]],
+          ],
+        ]
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+
+Outputs:
+  # Deliberately avoiding cross-stack references or SSM parameters-as-output here to allow this stack to be created multiple times in a region
+
+  # Best usage should come from making this part of a shallow nested stack, with the parent stack building on top of the event bus outputs below
+
+  EventBusName:
+    Description: The name of the event bus associated with the honeypot service
+    Value: !GetAtt EventBus.Name
+
+  EventBusArn:
+    Description: The ARN of the event bus associated with the honeypot service
+    Value: !GetAtt EventBus.Arn
