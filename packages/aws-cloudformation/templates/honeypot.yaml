@@ -4,12 +4,12 @@ Description: |
 Parameters:
   VpcId:
     AllowedPattern: ".+" # Makes it Required
-    Description: The VPC to place the honeypot service in
+    Description: (Required) The VPC to place the honeypot service in
     Type: String
 
   SubnetId:
     AllowedPattern: ".+" # Makes it Required
-    Description: The subnet to place the honeypot service in
+    Description: (Required) The subnet to place the honeypot service in
     Type: String
 
   ClusterNameOrArn:
