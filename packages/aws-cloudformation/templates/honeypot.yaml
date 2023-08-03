@@ -119,7 +119,7 @@ Resources:
       Tags:
         - Key: cloud-native-honeypot
           Value: true
-      # TaskRoleArn: # fill this out when integrating with EventBridge
+      TaskRoleArn: !GetAtt TaskRole.Arn
 
   LogGroup:
     Type: AWS::Logs::LogGroup
@@ -149,9 +149,35 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - "logs:CreateLogStream"
-                  - "logs:PutLogEvents"
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
+      Tags:
+        - Key: cloud-native-honeypot
+          Value: true
+
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Description: Allows cloud-native-honeypot task to publish events to EventBridge
+      Policies: 
+        - PolicyName: events-access
+          PolicyDocument: 
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - events:PutEvents
+                Resource: 
+                  - !GetAtt EventBus.Arn
       Tags:
         - Key: cloud-native-honeypot
           Value: true
