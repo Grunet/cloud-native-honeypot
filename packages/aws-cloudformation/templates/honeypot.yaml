@@ -168,15 +168,15 @@ Resources:
             Action:
               - sts:AssumeRole
       Description: Allows cloud-native-honeypot task to publish events to EventBridge
-      Policies: 
+      Policies:
         - PolicyName: events-access
-          PolicyDocument: 
+          PolicyDocument:
             Version: "2012-10-17"
             Statement:
               - Effect: Allow
                 Action:
                   - events:PutEvents
-                Resource: 
+                Resource:
                   - !GetAtt EventBus.Arn
       Tags:
         - Key: cloud-native-honeypot
@@ -200,19 +200,6 @@ Resources:
       Tags:
         - Key: cloud-native-honeypot
           Value: true
-
-  LogicalID:
-    Type: AWS::SSM::Parameter
-    Properties:
-      AllowedPattern: "String"
-      DataType: "String"
-      Description: "String"
-      Name: "String"
-      Policies: "String"
-      Tags: JSON
-      Tier: "String"
-      Type: "String" # Required
-      Value: "String" # Required
 
 # Transform:
 
