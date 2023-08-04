@@ -13,7 +13,7 @@ Parameters:
     Type: String
 
 Resources:
-  Role:
+  StackRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
