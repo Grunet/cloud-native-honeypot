@@ -1,0 +1,32 @@
+name: Release AWS Cloudformation
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    permissions:
+      # Needed to publish releases
+      contents: write
+    steps:
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Get version
+        id: get-version
+        working-directory: packages/aws-cloudformation
+        run: |
+          version=$(cat version.json | jq --raw-output .version)
+
+          echo "releaseVersion=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Release
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v0.1.15
+        with:
+          name: aws-cloudformation-v${{ steps.get-version.outputs.releaseVersion }}
+          tag_name: aws-cloudformation-v${{ steps.get-version.outputs.releaseVersion }}
+          body: |
+            The CHANGELOG.md file covers what's included in this release.
+          files: |
+              packages/aws-cloudformation/templates/honeypot.yaml
+              packages/aws-cloudformation/templates/honeypot-stack-policies.yaml
+            
