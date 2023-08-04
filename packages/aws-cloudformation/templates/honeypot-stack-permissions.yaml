@@ -30,7 +30,7 @@ Resources:
           - Sid: iam-access
             Effect: Allow
             Action:
-              - iam:PassRole # This could be targeted at the ARNs of the task role and task execution role for further hardening and defense-in-depth (at the cost of making the honeypot stack more complex, likely needing to break it up in at least 2 pieces)
+              - iam:PassRole # This could be targeted at the ARNs of the task role and task execution role for further hardening and defense-in-depth (at the cost of making the honeypot stack more complex, likely needing to break it up into at least 2 pieces)
               - iam:GetRole
               - iam:CreateRole
               - iam:AttachRolePolicy
