@@ -65,9 +65,11 @@ Resources:
           - Sid: ecs
             Effect: Allow
             Action:
+              - ecs:DescribeClusters
               - ecs:DeleteCluster
+              - ecs:DescribeServices
               - ecs:DeleteService
-              - ecs:DeregisterTaskDefinition
+              # - ecs:DeregisterTaskDefinition # See reason below
             Resource: "*"
             Condition:
               StringEquals:
