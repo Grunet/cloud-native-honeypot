@@ -41,6 +41,7 @@ Resources:
             Effect: Allow
             Action:
               - logs:CreateLogGroup
+              - logs:PutRetentionPolicy
               - logs:TagLogGroup
             Resource: "*"
           - Sid: events
