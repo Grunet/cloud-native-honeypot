@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  Declares policies for creating and deleting the honeypot stack
+
+Resources:
+  CreatePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Permissions for creating the cloud-native-honeypot stack
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: ecs-access
+            Effect: Allow
+            Action:
+              - ecs:CreateCluster
+              - ecs:CreateService
+              - ecs:DescribeServices
+              - ecs:RegisterTaskDefinition
+              - ecs:TagResource
+              - ecs:ListTagsForResource
+            Resource: "*"
+          - Sid: ec2-access
+            Effect: Allow
+            Action:
+              - ec2:CreateSecurityGroup
+              - ec2:AuthorizeSecurityGroupIngress
+              - ec2:CreateTags
+            Resource: "*"
+          - Sid: iam-access
+            Effect: Allow
+            Action:
+              - iam:PassRole # This could be targeted at the ARNs of the task role and task execution role for further hardening (at the cost of making the honeypot stack more complex)
+              - iam:GetRole
+              - iam:CreateRole
+              - iam:AttachRolePolicy
+              - iam:TagRole
+              - iam:ListRoleTags
+            Resource: "*"
+          - Sid: logs-access
+            Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:TagLogGroup
+            Resource: "*"
+          - Sid: events-access
+            Effect: Allow
+            Action:
+              - events:CreateEventBus
+              - events:TagResource
+            Resource: "*"
+Outputs:
+  CreatePolicyArn:
+    Description: The arn of the policy to use when creating the honeypot stack
+    Value: !Ref CreatePolicy
