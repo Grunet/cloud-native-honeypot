@@ -75,7 +75,7 @@ Resources:
           - Sid: ecsTaskDefinition
             Effect: Allow
             Action:
-              - ecs:DeregisterTaskDefinition # Doesn't seem to support resource tag conditions as of this writing
+              - ecs:DeregisterTaskDefinition # Doesn't seem to support resource tag conditions as of this writing, hence it being separated out
             Resource: "*"
             # Condition:
             #   StringEquals:
