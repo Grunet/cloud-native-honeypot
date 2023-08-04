@@ -10,7 +10,7 @@ Resources:
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
-          - Sid: ecs-access
+          - Sid: ecs
             Effect: Allow
             Action:
               - ecs:CreateCluster
@@ -20,14 +20,14 @@ Resources:
               - ecs:TagResource
               - ecs:ListTagsForResource
             Resource: "*"
-          - Sid: ec2-access
+          - Sid: ec2
             Effect: Allow
             Action:
               - ec2:CreateSecurityGroup
               - ec2:AuthorizeSecurityGroupIngress
               - ec2:CreateTags
             Resource: "*"
-          - Sid: iam-access
+          - Sid: iam
             Effect: Allow
             Action:
               - iam:PassRole # This could be targeted at the ARNs of the task role and task execution role for further hardening and defense-in-depth (at the cost of making the honeypot stack more complex, likely needing to break it up into at least 2 pieces)
@@ -37,13 +37,13 @@ Resources:
               - iam:TagRole
               - iam:ListRoleTags
             Resource: "*"
-          - Sid: logs-access
+          - Sid: logs
             Effect: Allow
             Action:
               - logs:CreateLogGroup
               - logs:TagLogGroup
             Resource: "*"
-          - Sid: events-access
+          - Sid: events
             Effect: Allow
             Action:
               - events:CreateEventBus
@@ -57,7 +57,7 @@ Resources:
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
-          - Sid: ecs-delete
+          - Sid: ecs
             Effect: Allow
             Action:
               - ecs:DeleteCluster
@@ -67,7 +67,7 @@ Resources:
             Condition:
               StringEquals:
                 "aws:ResourceTag/cloud-native-honeypot": "true"
-          - Sid: ec2-delete
+          - Sid: ec2
             Effect: Allow
             Action:
               - ec2:DeleteSecurityGroup
@@ -75,7 +75,7 @@ Resources:
             Condition:
               StringEquals:
                 "aws:ResourceTag/cloud-native-honeypot": "true"
-          - Sid: iam-delete
+          - Sid: iam
             Effect: Allow
             Action:
               - iam:DeleteRole
@@ -83,7 +83,7 @@ Resources:
               StringEquals:
                 "aws:ResourceTag/cloud-native-honeypot": "true"
             Resource: "*"
-          - Sid: logs-delete
+          - Sid: logs
             Effect: Allow
             Action:
               - logs:DeleteLogGroup
@@ -91,7 +91,7 @@ Resources:
             Condition:
               StringEquals:
                 "aws:ResourceTag/cloud-native-honeypot": "true"
-          - Sid: events-delete
+          - Sid: events
             Effect: Allow
             Action:
               - events:DeleteEventBus
