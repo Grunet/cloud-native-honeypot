@@ -75,11 +75,11 @@ Resources:
           - Sid: ecsTaskDefinition
             Effect: Allow
             Action:
-              - ecs:DeregisterTaskDefinition
+              - ecs:DeregisterTaskDefinition # Doesn't seem to support resource tag conditions as of this writing
             Resource: "*"
             # Condition:
             #   StringEquals:
-            #     "aws:ResourceTag/cloud-native-honeypot": "true" # Doesn't seem to support resource tag conditions as of this writing
+            #     "aws:ResourceTag/cloud-native-honeypot": "true"
           - Sid: ec2
             Effect: Allow
             Action:
