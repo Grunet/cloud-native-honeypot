@@ -35,7 +35,8 @@ Resources:
               - iam:PassRole # This could be targeted at the ARNs of the task role and task execution role for further hardening and defense-in-depth (at the cost of making the honeypot stack more complex, likely needing to break it up into at least 2 pieces)
               - iam:GetRole
               - iam:CreateRole
-              - iam:AttachRolePolicy
+              - iam:GetRolePolicy
+              - iam:PutRolePolicy
               - iam:TagRole
               - iam:ListRoleTags
             Resource: "*"
@@ -71,6 +72,14 @@ Resources:
             Condition:
               StringEquals:
                 "aws:ResourceTag/cloud-native-honeypot": "true"
+          - Sid: ecsTaskDefinition
+            Effect: Allow
+            Action:
+              - ecs:DeregisterTaskDefinition
+            Resource: "*"
+            # Condition:
+            #   StringEquals:
+            #     "aws:ResourceTag/cloud-native-honeypot": "true" # Doesn't seem to support resource tag conditions as of this writing
           - Sid: ec2
             Effect: Allow
             Action:
@@ -84,6 +93,7 @@ Resources:
             Effect: Allow
             Action:
               - iam:DeleteRole
+              - iam:DeleteRolePolicy
             Condition:
               StringEquals:
                 "aws:ResourceTag/cloud-native-honeypot": "true"
