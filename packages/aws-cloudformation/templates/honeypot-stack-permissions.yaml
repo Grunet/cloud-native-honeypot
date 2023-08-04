@@ -49,7 +49,47 @@ Resources:
               - events:CreateEventBus
               - events:TagResource
             Resource: "*"
+
+  DeletePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Permissions for deleting the cloud-native-honeypot stack
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: ecs-delete
+            Effect: Allow
+            Action:
+              - ecs:DeleteCluster
+              - ecs:DeleteService
+              - ecs:DeregisterTaskDefinition
+            Resource: "*"
+          - Sid: ec2-delete
+            Effect: Allow
+            Action:
+              - ec2:DeleteSecurityGroup
+            Resource: "*"
+          - Sid: iam-delete
+            Effect: Allow
+            Action:
+              - iam:DeleteRole
+            Resource: "*"
+          - Sid: logs-delete
+            Effect: Allow
+            Action:
+              - logs:DeleteLogGroup
+            Resource: "*"
+          - Sid: events-delete
+            Effect: Allow
+            Action:
+              - events:DeleteEventBus
+            Resource: "*"
+
 Outputs:
   CreatePolicyArn:
     Description: The arn of the policy to use when creating the honeypot stack
     Value: !Ref CreatePolicy
+
+  DeletePolicyArn:
+    Description: The arn of the policy to use when deleting the honeypot stack
+    Value: !Ref DeletePolicy
