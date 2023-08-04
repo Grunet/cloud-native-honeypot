@@ -1,0 +1,125 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  Declares policies for creating and deleting the honeypot stack
+
+Resources:
+  CreatePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Permissions for creating the cloud-native-honeypot stack
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: ecs
+            Effect: Allow
+            Action:
+              - ecs:CreateCluster
+              - ecs:DescribeClusters
+              - ecs:CreateService
+              - ecs:DescribeServices
+              - ecs:RegisterTaskDefinition
+              - ecs:TagResource
+              - ecs:ListTagsForResource
+            Resource: "*"
+          - Sid: ec2
+            Effect: Allow
+            Action:
+              - ec2:CreateSecurityGroup
+              - ec2:DescribeSecurityGroups
+              - ec2:AuthorizeSecurityGroupIngress
+              - ec2:CreateTags
+            Resource: "*"
+          - Sid: iam
+            Effect: Allow
+            Action:
+              - iam:PassRole # This could be targeted at the ARNs of the task role and task execution role for further hardening and defense-in-depth (at the cost of making the honeypot stack more complex, likely needing to break it up into at least 2 pieces)
+              - iam:GetRole
+              - iam:CreateRole
+              - iam:GetRolePolicy
+              - iam:PutRolePolicy
+              - iam:TagRole
+              - iam:ListRoleTags
+            Resource: "*"
+          - Sid: logs
+            Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:PutRetentionPolicy
+              - logs:TagLogGroup
+            Resource: "*"
+          - Sid: events
+            Effect: Allow
+            Action:
+              - events:CreateEventBus
+              - events:DescribeEventBus
+              - events:TagResource
+            Resource: "*"
+
+  DeletePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Permissions for deleting the cloud-native-honeypot stack
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: ecs
+            Effect: Allow
+            Action:
+              - ecs:DeleteCluster
+              - ecs:DeleteService
+              - ecs:DeregisterTaskDefinition
+            Resource: "*"
+            Condition:
+              StringEquals:
+                "aws:ResourceTag/cloud-native-honeypot": "true"
+          - Sid: ecsTaskDefinition
+            Effect: Allow
+            Action:
+              - ecs:DeregisterTaskDefinition # Doesn't seem to support resource tag conditions as of this writing, hence it being separated out
+            Resource: "*"
+            # Condition:
+            #   StringEquals:
+            #     "aws:ResourceTag/cloud-native-honeypot": "true"
+          - Sid: ec2
+            Effect: Allow
+            Action:
+              - ec2:DeleteSecurityGroup
+              - ec2:DescribeSecurityGroups
+            Resource: "*"
+            Condition:
+              StringEquals:
+                "aws:ResourceTag/cloud-native-honeypot": "true"
+          - Sid: iam
+            Effect: Allow
+            Action:
+              - iam:DeleteRole
+              - iam:DeleteRolePolicy
+            Condition:
+              StringEquals:
+                "aws:ResourceTag/cloud-native-honeypot": "true"
+            Resource: "*"
+          - Sid: logs
+            Effect: Allow
+            Action:
+              - logs:DeleteLogGroup
+            Resource: "*"
+            Condition:
+              StringEquals:
+                "aws:ResourceTag/cloud-native-honeypot": "true"
+          - Sid: events
+            Effect: Allow
+            Action:
+              - events:DeleteEventBus
+            Resource: "*"
+            Condition:
+              StringEquals:
+                "aws:ResourceTag/cloud-native-honeypot": "true"
+
+Outputs:
+  CreatePolicyArn:
+    Description: The arn of the policy to use when creating the honeypot stack
+    Value: !Ref CreatePolicy
+
+  DeletePolicyArn:
+    Description: The arn of the policy to use when deleting the honeypot stack
+    Value: !Ref DeletePolicy

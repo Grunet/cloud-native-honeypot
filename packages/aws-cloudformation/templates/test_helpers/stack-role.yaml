@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  Declares a role for use in creating or deleting the honeypot stack
+Parameters:
+  CreatePolicyArn:
+    AllowedPattern: ".+" # Makes it Required
+    Description: (Required) The arn of the managed policy for create actions
+    Type: String
+
+  DeletePolicyArn:
+    AllowedPattern: ".+" # Makes it Required
+    Description: (Required) The arn of the managed policy for delete actions
+    Type: String
+
+Resources:
+  StackRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudformation.amazonaws.com
+            Action: sts:AssumeRole
+      Description: Role to use in creating or deleting the honeypot stack
+      ManagedPolicyArns:
+        - !Ref CreatePolicyArn
+        - !Ref DeletePolicyArn
+      Tags:
+        - Key: cloud-native-honeypot-stack-role
+          Value: True
