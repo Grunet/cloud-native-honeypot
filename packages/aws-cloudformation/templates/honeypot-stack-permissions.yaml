@@ -64,26 +64,41 @@ Resources:
               - ecs:DeleteService
               - ecs:DeregisterTaskDefinition
             Resource: "*"
+            Condition:
+              StringEquals:
+                "aws:ResourceTag/cloud-native-honeypot": "true"
           - Sid: ec2-delete
             Effect: Allow
             Action:
               - ec2:DeleteSecurityGroup
             Resource: "*"
+            Condition:
+              StringEquals:
+                "aws:ResourceTag/cloud-native-honeypot": "true"
           - Sid: iam-delete
             Effect: Allow
             Action:
               - iam:DeleteRole
+            Condition:
+              StringEquals:
+                "aws:ResourceTag/cloud-native-honeypot": "true"
             Resource: "*"
           - Sid: logs-delete
             Effect: Allow
             Action:
               - logs:DeleteLogGroup
             Resource: "*"
+            Condition:
+              StringEquals:
+                "aws:ResourceTag/cloud-native-honeypot": "true"
           - Sid: events-delete
             Effect: Allow
             Action:
               - events:DeleteEventBus
             Resource: "*"
+            Condition:
+              StringEquals:
+                "aws:ResourceTag/cloud-native-honeypot": "true"
 
 Outputs:
   CreatePolicyArn:
