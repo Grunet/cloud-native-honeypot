@@ -67,7 +67,7 @@ Resources:
             Action:
               - ecs:DeleteCluster
               - ecs:DeleteService
-              - ecs:DeregisterTaskDefinition
+              # - ecs:DeregisterTaskDefinition # See reason below
             Resource: "*"
             Condition:
               StringEquals:
