@@ -10,9 +10,14 @@ What is in scope for breaking changes includes (but isn't necessarily limited to
 
 ## Changes
 
-### (Unreleased)
+### v0.2.0
+
+- Restrict values for LogRetentionPolicy in the honeypot stack to the values log groups allow so there's feedback before stack creation
+- Allow for injecting a KMS key into the honeypot stack to use for the new log group
+- Switch to using managed policies instead of inline policies for the task and task execution roles
 
 - (Dev only change) Always use the latest Amazon Linux 2023 image for the basion host
+- (Dev only change) Start using cfn-guard for security static analysis
 
 ### v0.1.1
 

@@ -22,14 +22,45 @@ Parameters:
     Type: String
     Default: ""
 
+  KmsKeyArnForLogGroup:
+    Description: The ARN of a KMS key to encrypt the logs instead of using CloudWatch's default encryption (only applies if the stack creates a new log group)
+    Type: String
+    Default: ""
+
   LogRetentionInDays:
     Description: The number of days to retain logs emitted by the honeypot service (only applies if the stack creates a new log group)
     Type: Number
     Default: 7
+    AllowedValues:
+      [
+        1,
+        3,
+        5,
+        7,
+        14,
+        30,
+        60,
+        90,
+        120,
+        150,
+        180,
+        365,
+        400,
+        545,
+        731,
+        1096,
+        1827,
+        2192,
+        2557,
+        2922,
+        3288,
+        3653,
+      ]
 
 Conditions:
   CreateNewCluster: !Equals [!Ref ClusterNameOrArn, ""]
   CreateNewLogGroup: !Equals [!Ref LogGroupName, ""]
+  KmsKeyForNewLogGroupSpecified: !Not [!Equals [!Ref KmsKeyArnForLogGroup, ""]]
 
 Resources:
   # ECS
@@ -119,8 +150,16 @@ Resources:
 
   LogGroup:
     Type: AWS::Logs::LogGroup
+    Metadata:
+      guard:
+        SuppressedRules:
+          - CW_LOGGROUP_RETENTION_PERIOD_CHECK # Static analysis is expecting RetentionInDays to be a hard-coded number (one of the specifically allowed values)
     Condition: CreateNewLogGroup
     Properties:
+      KmsKeyId: !If
+        - KmsKeyForNewLogGroupSpecified
+        - !Ref KmsKeyArnForLogGroup
+        - !Ref "AWS::NoValue"
       RetentionInDays: !Ref LogRetentionInDays
       Tags:
         - Key: cloud-native-honeypot
@@ -137,34 +176,39 @@ Resources:
               Service: ecs-tasks.amazonaws.com
             Action:
               - sts:AssumeRole
-      Description: Allows cloud-native-honeypot task to write to CloudWatch Logs
-      Policies:
-        - PolicyName: logs-access
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogStream # Calls on both the log group and log stream as resources, hence both resources being present together
-                  - logs:PutLogEvents
-                Resource:
-                  - !Sub
-                    - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}
-                    - NameOfChosenLogGroup:
-                        Fn::If:
-                          - CreateNewLogGroup
-                          - !Ref LogGroup
-                          - !Ref LogGroupName
-                  - !Sub
-                    - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}:log-stream:*
-                    - NameOfChosenLogGroup:
-                        Fn::If:
-                          - CreateNewLogGroup
-                          - !Ref LogGroup
-                          - !Ref LogGroupName
+      Description: Allows cloud-native-honeypot task(s) to write to CloudWatch Logs
+      ManagedPolicyArns:
+        - !Ref TaskExecutionRolePolicy
       Tags:
         - Key: cloud-native-honeypot
           Value: true
+
+  TaskExecutionRolePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Allows cloud-native-honeypot task(s) to write to CloudWatch Logs
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogStream # Calls on both the log group and log stream as resources, hence both resources being present together
+              - logs:PutLogEvents
+            Resource:
+              - !Sub
+                - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}
+                - NameOfChosenLogGroup:
+                    Fn::If:
+                      - CreateNewLogGroup
+                      - !Ref LogGroup
+                      - !Ref LogGroupName
+              - !Sub
+                - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}:log-stream:*
+                - NameOfChosenLogGroup:
+                    Fn::If:
+                      - CreateNewLogGroup
+                      - !Ref LogGroup
+                      - !Ref LogGroupName
 
   TaskRole:
     Type: AWS::IAM::Role
@@ -177,20 +221,25 @@ Resources:
               Service: ecs-tasks.amazonaws.com
             Action:
               - sts:AssumeRole
-      Description: Allows cloud-native-honeypot task to publish events to EventBridge
-      Policies:
-        - PolicyName: events-access
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - events:PutEvents
-                Resource:
-                  - !GetAtt EventBus.Arn
+      Description: Allows cloud-native-honeypot task(s) to publish events to EventBridge
+      ManagedPolicyArns:
+        - !Ref TaskRolePolicy
       Tags:
         - Key: cloud-native-honeypot
           Value: true
+
+  TaskRolePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Allows cloud-native-honeypot task(s) to publish events to EventBridge
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - events:PutEvents
+            Resource:
+              - !GetAtt EventBus.Arn
 
   # EventBridge
 

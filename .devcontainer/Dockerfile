@@ -15,3 +15,9 @@ RUN POETRY_VERSION=1.5.1 POETRY_HOME=/home/vscode/.local/ python poetryInstallSc
 
 RUN apt-get install -y python3-pip="22.0.2+dfsg-1ubuntu0.3"
 RUN pip install cfn-lint=='0.79.5'
+
+# This is partially duplicated in ci.yaml, with the copy target being the only difference
+RUN mkdir ./cfn-guard-temp/
+RUN wget https://github.com/aws-cloudformation/cloudformation-guard/releases/download/3.0.0/cfn-guard-v3-ubuntu-latest.tar.gz -O - | tar -xzvf - -C ./cfn-guard-temp/
+RUN cp ./cfn-guard-temp/cfn-guard-v3-ubuntu-latest/cfn-guard /home/vscode/.local/bin/
+RUN rm -rf ./cfn-guard-temp/
