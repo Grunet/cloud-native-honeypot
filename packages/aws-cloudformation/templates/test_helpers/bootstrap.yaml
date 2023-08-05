@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: |
   A VPC and an instance to test other infrastructure inside of
 Parameters:
-  # Values from parameter store. DO NOT modify
+  # Values to be pulled from parameter store. DO NOT change when deploying the stack
 
   BastionImageId:
     Description: (Do not change) The id of the AMI to use for the bastion
