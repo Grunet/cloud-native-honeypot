@@ -172,34 +172,39 @@ Resources:
               Service: ecs-tasks.amazonaws.com
             Action:
               - sts:AssumeRole
-      Description: Allows cloud-native-honeypot task to write to CloudWatch Logs
-      Policies:
-        - PolicyName: logs-access
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogStream # Calls on both the log group and log stream as resources, hence both resources being present together
-                  - logs:PutLogEvents
-                Resource:
-                  - !Sub
-                    - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}
-                    - NameOfChosenLogGroup:
-                        Fn::If:
-                          - CreateNewLogGroup
-                          - !Ref LogGroup
-                          - !Ref LogGroupName
-                  - !Sub
-                    - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}:log-stream:*
-                    - NameOfChosenLogGroup:
-                        Fn::If:
-                          - CreateNewLogGroup
-                          - !Ref LogGroup
-                          - !Ref LogGroupName
+      Description: Allows cloud-native-honeypot task(s) to write to CloudWatch Logs
+      ManagedPolicyArns:
+        - !Ref TaskExecutionRolePolicy
       Tags:
         - Key: cloud-native-honeypot
           Value: true
+
+  TaskExecutionRolePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Allows cloud-native-honeypot task(s) to write to CloudWatch Logs
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogStream # Calls on both the log group and log stream as resources, hence both resources being present together
+              - logs:PutLogEvents
+            Resource:
+              - !Sub
+                - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}
+                - NameOfChosenLogGroup:
+                    Fn::If:
+                      - CreateNewLogGroup
+                      - !Ref LogGroup
+                      - !Ref LogGroupName
+              - !Sub
+                - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${NameOfChosenLogGroup}:log-stream:*
+                - NameOfChosenLogGroup:
+                    Fn::If:
+                      - CreateNewLogGroup
+                      - !Ref LogGroup
+                      - !Ref LogGroupName
 
   TaskRole:
     Type: AWS::IAM::Role
@@ -212,20 +217,25 @@ Resources:
               Service: ecs-tasks.amazonaws.com
             Action:
               - sts:AssumeRole
-      Description: Allows cloud-native-honeypot task to publish events to EventBridge
-      Policies:
-        - PolicyName: events-access
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - events:PutEvents
-                Resource:
-                  - !GetAtt EventBus.Arn
+      Description: Allows cloud-native-honeypot task(s) to publish events to EventBridge
+      ManagedPolicyArns:
+        - !Ref TaskRolePolicy
       Tags:
         - Key: cloud-native-honeypot
           Value: true
+
+  TaskRolePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Allows cloud-native-honeypot task(s) to publish events to EventBridge
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - events:PutEvents
+            Resource:
+              - !GetAtt EventBus.Arn
 
   # EventBridge
 
