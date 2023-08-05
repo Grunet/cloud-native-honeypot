@@ -1,6 +1,14 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: |
   A VPC and an instance to test other infrastructure inside of
+Parameters:
+  # Values to be pulled from parameter store. DO NOT change when deploying the stack
+
+  BastionImageId:
+    Description: (Do not change) The id of the AMI to use for the bastion
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -115,7 +123,7 @@ Resources:
   Bastion:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-0f462f8e997b10a20 # al2023-ami-minimal-2023.1.20230725.0-kernel-6.1-x86_64
+      ImageId: !Ref BastionImageId
       IamInstanceProfile: !Ref InstanceProfile
       InstanceType: "t2.nano"
       SecurityGroupIds:

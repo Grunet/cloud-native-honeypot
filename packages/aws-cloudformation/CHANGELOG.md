@@ -10,6 +10,10 @@ What is in scope for breaking changes includes (but isn't necessarily limited to
 
 ## Changes
 
+### (Unreleased)
+
+- (Dev only change) Always use the latest Amazon Linux 2023 image for the basion host
+
 ### v0.1.1
 
 - Fix bug that wouldn't let the delete policy work without also having the create policy
