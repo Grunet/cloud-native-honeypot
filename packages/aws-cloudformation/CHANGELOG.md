@@ -12,6 +12,9 @@ What is in scope for breaking changes includes (but isn't necessarily limited to
 
 ### (Unreleased)
 
+- Restrict values for LogRetentionPolicy in the honeypot stack to the values log groups allow so there's feedback before stack creation
+- Allow for injecting a KMS key into the honeypot stack to use for the new log group
+
 - (Dev only change) Always use the latest Amazon Linux 2023 image for the basion host
 
 ### v0.1.1
