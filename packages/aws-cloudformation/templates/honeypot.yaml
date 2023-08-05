@@ -22,6 +22,11 @@ Parameters:
     Type: String
     Default: ""
 
+  KmsKeyArnForLogGroup:
+    Description: The ARN of a KMS key to encrypt the logs instead of using CloudWatch's default encryption (only applies if the stack creates a new log group)
+    Type: String
+    Default: ""
+
   LogRetentionInDays:
     Description: The number of days to retain logs emitted by the honeypot service (only applies if the stack creates a new log group)
     Type: Number
@@ -55,6 +60,7 @@ Parameters:
 Conditions:
   CreateNewCluster: !Equals [!Ref ClusterNameOrArn, ""]
   CreateNewLogGroup: !Equals [!Ref LogGroupName, ""]
+  KmsKeyForNewLogGroupSpecified: !Not [!Equals [!Ref KmsKeyArnForLogGroup, ""]]
 
 Resources:
   # ECS
@@ -146,6 +152,10 @@ Resources:
     Type: AWS::Logs::LogGroup
     Condition: CreateNewLogGroup
     Properties:
+      KmsKeyId: !If
+        - KmsKeyForNewLogGroupSpecified
+        - !Ref KmsKeyArnForLogGroup
+        - !Ref "AWS::NoValue"
       RetentionInDays: !Ref LogRetentionInDays
       Tags:
         - Key: cloud-native-honeypot
