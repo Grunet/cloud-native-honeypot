@@ -127,4 +127,22 @@ It should be ignoring all (non-security) patch and minor updates, but in case it
 
 Picking up security patches requires first learning about them in the first place. These are the strategies for doing that with the dependencies.
 
-TODO
+#### cfn-lint
+
+A watch for releases and security alerts was turned on for https://github.com/aws-cloudformation/cfn-lint
+
+#### cfn-guard
+
+A watch for releases and security alerts was turned on for https://github.com/aws-cloudformation/cloudformation-guard
+
+#### Vendored guard-rules-registry-all-rules.guard file
+
+A watch for releases and security alerts was turned on for https://github.com/aws-cloudformation/aws-guard-rules-registry
+
+#### PlatformVersion in the ECS Service
+
+The `check-for-updated-dependencies.yaml` tries to detect any newly released platform versions for Fargate.
+
+#### 3rd Party Github Actions
+
+Dependabot should be creating notices for these.
