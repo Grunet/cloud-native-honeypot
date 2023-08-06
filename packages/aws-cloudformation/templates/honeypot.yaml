@@ -123,7 +123,7 @@ Resources:
               Value: !Ref AWS::Region
             - Name: EVENTBRIDGE_EVENT_BUS_NAME_OR_ARN
               Value: !Ref EventBus
-          Image: ghcr.io/grunet/cloud-native-honeypot:v0.4.4
+          Image: ghcr.io/grunet/cloud-native-honeypot:v0.4.5
           LogConfiguration:
             LogDriver: awslogs
             Options:
