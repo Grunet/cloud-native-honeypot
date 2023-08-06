@@ -16,3 +16,15 @@ jobs:
 
       # If this fails, that likely means the "latest" and "latest-dev" tags for Python are pointing at new images with new digests
       # Follow the process to update the Dockerfiles accordingly, then update the hardcoded digest here to be one of the new digests (doesn't matter which one) to detect future changes
+
+  fargate-platform-version:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check platform versions page
+        run: |
+          curl https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform-linux-fargate.html | grep 1.4.1; test $? -eq 1
+          curl https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform-linux-fargate.html | grep 1.5.0; test $? -eq 1
+          curl https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform-linux-fargate.html | grep 2.0.0; test $? -eq 1
+
+      # If this fails, that likely means there's a new platform version for Fargate available
+      # Follow the process to update the templates accordingly, then update the versions here to the next possible patch, minor, and major versions
