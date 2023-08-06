@@ -10,6 +10,10 @@ What is in scope for breaking changes includes (but isn't necessarily limited to
 
 ## Changes
 
+### v0.2.1
+
+- Update honeypot container image from v0.4.4 to v0.4.5
+
 ### v0.2.0
 
 - Restrict values for LogRetentionPolicy in the honeypot stack to the values log groups allow so there's feedback before stack creation
