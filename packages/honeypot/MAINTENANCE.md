@@ -155,7 +155,29 @@ If the version is newer than the one in use, go follow the steps in the [python 
 
 If the version is the same, that means there's only updates to the rest of the base image to be taken.
 
-Follow these steps to update the base images
+First, follow these steps to verify the Chainguard images haven't been replaced or tampered with
+
+1. [Install cosign](https://docs.sigstore.dev/cosign/installation/) (make sure to update the steps to use the latest version)
+2. Run the following command to check the `latest-dev` image
+```bash
+cosign verify --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity=https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main cgr.dev/chainguard/python:latest-dev
+```
+3. Run the following command to check the `latest` image
+```bash
+cosign verify --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity=https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main cgr.dev/chainguard/python:latest
+```
+
+The output of both should look like
+
+```
+Verification for cgr.dev/chainguard/python@latest --
+The following checks were performed on each of these signatures:
+  - The cosign claims were validated
+  - Existence of the claims in the transparency log was verified offline
+  - The code-signing certificate was verified using trusted certificate authority certificates
+```
+
+If that's so, then follow these steps to update the base images
 
 1. Navigate to https://edu.chainguard.dev/chainguard/chainguard-images/reference/python/overview/
 2. Inspect the date of the latest images releases, and make sure it's not too recent (e.g. the same day)
