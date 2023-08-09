@@ -6,7 +6,7 @@
 
 The templates are currently organized as follows
 
-1. `bootstrap.yaml` - Sets up a VPC and subnets and 1 ECS instance to SSM into
+1. `bootstrap.yaml` - Sets up a VPC and subnets and 1 EC2 instance to SSM into
 2. `honeypot.yaml` - Deploys an ECS service with the honeypot and an EventBridge event bus
 3. `events_to_logs.yaml` - Deploys a rule to convert events published to the event bus to logs
 
