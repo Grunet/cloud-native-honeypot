@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Check overview page
         run: |
-          curl https://edu.chainguard.dev/chainguard/chainguard-images/reference/python/overview/ | grep sha256:2a6931375b21a4053e9961d559caa94ddb2546c2b00aedb508884fb03694999d
+          curl https://edu.chainguard.dev/chainguard/chainguard-images/reference/python/overview/ | grep sha256:6e512c60467cb53572112d8b5f1200d93cc7f883db01e57836fd93754f6bb4e8
 
       # If this fails, that likely means the "latest" and "latest-dev" tags for Python are pointing at new images with new digests
       # Follow the process to update the Dockerfiles accordingly, then update the hardcoded digest here to be one of the new digests (doesn't matter which one) to detect future changes
