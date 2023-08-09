@@ -13,6 +13,11 @@ What is in scope for breaking changes includes
 
 ## Changes
 
+### v0.4.6
+
+- Update Chainguard base images in the Dockerfile
+- Add steps in update process to check Chainguard base image signatures
+
 ### v0.4.5
 
 - Update Chainguard base images in the Dockerfile
