@@ -39,4 +39,11 @@ If you have the means, paying for a honeypot from a vendor (e.g. [ThinkstCanary]
 
 There are other open source options out there to self-host (e.g. [T-Pot](https://github.com/telekom-security/tpotce)) but I didn't find any that seemed easy to deploy and integrate into cloud resources.
 
+## More Information
+
+Check out the subproject README.md files for more information
+
+- [aws-cloudformation](./packages/aws-cloudformation/README.md)
+- [honeypot](./packages/honeypot/README.md)
+
 
