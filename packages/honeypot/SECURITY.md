@@ -4,17 +4,29 @@
 
 ### Verifying Container Signatures for Tamperment Detection
 
-TODO - document how to install cosign, then pick an image SHA, then run the following command
+To verify the container image hasn't been modified post-publishing, follow these steps:
 
-cosign verify --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity=https://github.com/Grunet/cloud-native-honeypot/.github/workflows/release-honeypot.yaml@refs/heads/main ghcr.io/grunet/cloud-native-honeypot@sha256:6282d824407abb0caefec65574cd40ad995a654ae2b24083a46d02fe12e626fb
+1. [Install cosign](https://docs.sigstore.dev/cosign/installation/) (make sure to update the steps to use the latest version)
+2. Get the SHA of the container image (i.e. by clicking into one of the lines in https://github.com/Grunet/cloud-native-honeypot/pkgs/container/cloud-native-honeypot)
+3. Run the following command
 
-Then should see 
+```bash
+cosign verify --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity=https://github.com/Grunet/cloud-native-honeypot/.github/workflows/release-honeypot.yaml@refs/heads/main ghcr.io/grunet/cloud-native-honeypot@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```
 
-Verification for ghcr.io/grunet/cloud-native-honeypot@sha256:6282d824407abb0caefec65574cd40ad995a654ae2b24083a46d02fe12e626fb --
+Where the long string of a's is replaced by the actual SHA.
+
+You should then see output like 
+
+```
+Verification for ghcr.io/grunet/cloud-native-honeypot@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa --
 The following checks were performed on each of these signatures:
   - The cosign claims were validated
   - Existence of the claims in the transparency log was verified offline
   - The code-signing certificate was verified using trusted certificate authority certificates
+```
+
+which confirms the repository and image haven't been tampered with.
 
 ### Notes on Github Workflows
 
