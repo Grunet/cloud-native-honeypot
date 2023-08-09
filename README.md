@@ -21,4 +21,22 @@ You can add an Evenbridge rule to the event bus to react to the events.
 
 For example, you could add a rule targeting events with source `cloud-native-honeypot` that invokes an SNS topic, which then notifies humans of the events.
 
+## Alternatives
+
+There are several alternatives to this that are worth considering
+
+### Alerting Off of VPC Flow Logs
+
+Reserving an ip address with an ENI, then alerting on any flow logs with a matching destination ip address is another way to achieve the same effect.
+
+However it's less extensible than the approach here, as it can't be generalized to become a "high-interaction" honeypot that emulates a realistic server.
+
+### Commercial Options
+
+If you have the means, paying for a honeypot from a vendor (e.g. [ThinkstCanary](https://help.canary.tools/hc/en-gb/articles/360012852197-How-do-I-create-an-AWS-EC2-Cloud-Canary-)) is likely a better option.
+
+### Open Source Options
+
+There are other open source options out there to self-host (e.g. [T-Pot](https://github.com/telekom-security/tpotce)) but I didn't find any that seemed easy to deploy and integrate into cloud resources.
+
 
