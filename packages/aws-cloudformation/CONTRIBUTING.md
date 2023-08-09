@@ -8,7 +8,7 @@ The templates are currently organized as follows
 2. `honeypot.yaml` - Deploys an ECS service with the honeypot and an EventBridge event bus
 3. `events_to_logs.yaml` - Deploys a rule to convert events published to the event bus to logs
 
-These 3 can be created in this order for testing purposes.
+These 3 can be created in this order for testing purposes (e.g. SSM-ing into the EC2 instance and sending a request to the Fargate task).
 
 To test the stack policies, a stack role can be created from these templates
 
