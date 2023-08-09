@@ -10,3 +10,5 @@ The following features were manually enabled for this repository at Settings > C
 - Dependabot security updates
 - CodeQL analysis (default configuration)
 - Secret scanning and push protection
+
+Branch protection rule settings - https://github.com/Grunet/cloud-native-honeypot/settings/branches , in particular about requiring signed commits
