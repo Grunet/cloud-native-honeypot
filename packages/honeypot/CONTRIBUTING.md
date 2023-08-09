@@ -20,7 +20,7 @@ It could be pinned to a patch version in `devcontainer.json` but then Python wou
 
 ## Dependency Management
 
-### Philosophy of Taking on Dependencies
+### Philosophy around Taking on Dependencies
 
 By default, this project should try to avoid taking on production PyPi dependencies as much as possible, for the sake of runtime security, supply chain security, and maintenance.
 
