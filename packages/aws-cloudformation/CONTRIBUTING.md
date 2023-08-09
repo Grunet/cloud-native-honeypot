@@ -19,7 +19,7 @@ Adding this role as a stack role when deploying the `honeypot.yaml` template can
 
 ## Test AWS Account
 
-The account for testing was setup as a single account with
+An account for testing was setup as a single AWS account with
 
 - A root user with MFA enabled
 - An IAM user with AdministratorAccess and MFA enabled
