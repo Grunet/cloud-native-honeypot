@@ -1,5 +1,7 @@
 # Honeypot - Security
 
+TODO - document something about Python install in CI not requiring new downloads per https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#hosted-tool-cache
+
 ## Tools in Place
 
 ## Security Static Analysis
