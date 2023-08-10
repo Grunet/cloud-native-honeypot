@@ -10,13 +10,23 @@ jobs:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
         # Adapted from https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#caching-packages
+
+      - name: Check pipx version
+        # Make sure the version of pipx doesn't unexpectedly change
+        # If this change looks legitimate (i.e. Github updating the vendored version, or coming after a change to the runner OS version) update the hard-coded version below
+        run: |
+          pipx --version
+          pipx --version | grep "1.2.0"
+
       - name: Install poetry
         run: |
           pipx install poetry==1.5.1
+
       - uses: actions/setup-python@bd6b4b6205c4dbad673328db7b31b7fab9e241c0 # v4.6.1
         with:
           python-version: "3.11.4"
           cache: "poetry"
+
       - run: |
           poetry install
 
@@ -62,6 +72,8 @@ jobs:
 
   aws-cloudformation:
     runs-on: ubuntu-22.04
+    env:
+      CFN_GUARD_VERSION: 3.0.0
     defaults:
       run:
         working-directory: packages/aws-cloudformation/
@@ -83,11 +95,19 @@ jobs:
         run: |
           make lint
 
+      - name: Cache cfn-guard
+        id: cache-cfn-guard
+        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
+        with:
+          path: ~/.local/bin/cfn-guard
+          key: cfn-guard-v${{ env.CFN_GUARD_VERSION }}
+
       - name: Install cfn-guard
+        if: steps.cache-cfn-guard.outputs.cache-hit != 'true'
         # This is partially duplicated in .devcontainer/Dockerfile, with the copy target being the only difference
         run: |
           mkdir ./cfn-guard-temp/
-          wget https://github.com/aws-cloudformation/cloudformation-guard/releases/download/3.0.0/cfn-guard-v3-ubuntu-latest.tar.gz -O - | tar -xzvf - -C ./cfn-guard-temp/
+          wget https://github.com/aws-cloudformation/cloudformation-guard/releases/download/${{ env.CFN_GUARD_VERSION }}/cfn-guard-v3-ubuntu-latest.tar.gz -O - | tar -xzvf - -C ./cfn-guard-temp/
           cp ./cfn-guard-temp/cfn-guard-v3-ubuntu-latest/cfn-guard ~/.local/bin/
           rm -rf ./cfn-guard-temp/
 
