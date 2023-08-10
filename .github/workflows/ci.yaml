@@ -83,7 +83,6 @@ jobs:
   aws-cloudformation:
     runs-on: ubuntu-22.04
     env:
-      CFN_LINT_VERSION: 0.79.5
       CFN_GUARD_VERSION: 3.0.0
     defaults:
       run:
@@ -98,17 +97,9 @@ jobs:
           pip --version
           pip --version | grep "22.0.2"
 
-      # - name: Cache cfn-lint
-      #   id: cache-cfn-lint
-      #   uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
-      #   with:
-      #     path: ~/.local/bin/cfn-lint
-      #     key: cfn-lint-v${{ env.CFN_LINT_VERSION }}
-
       - name: Install cfn-lint
-        # if: steps.cache-cfn-lint.outputs.cache-hit != 'true'
         run: |
-          pip install cfn-lint=='${{ env.CFN_LINT_VERSION }}'
+          pip install cfn-lint=='0.79.5'
 
       - name: Lint
         run: |
