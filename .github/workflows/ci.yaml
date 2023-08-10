@@ -26,6 +26,7 @@ jobs:
         with:
           path: /opt/pipx_bin/poetry
           key: poetry-v${{ env.POETRY_VERSION }}
+
       - name: Install poetry
         if: steps.cache-poetry.outputs.cache-hit != 'true'
         run: |
@@ -35,6 +36,7 @@ jobs:
         with:
           python-version: "3.11.4"
           cache: "poetry"
+
       - run: |
           poetry install
 
@@ -102,6 +104,7 @@ jobs:
         with:
           path: ~/.local/bin/cfn-lint
           key: cfn-lint-v${{ env.CFN_LINT_VERSION }}
+
       - name: Install cfn-lint
         if: steps.cache-cfn-lint.outputs.cache-hit != 'true'
         run: |
@@ -117,6 +120,7 @@ jobs:
         with:
           path: ~/.local/bin/cfn-guard
           key: cfn-guard-v${{ env.CFN_GUARD_VERSION }}
+
       - name: Install cfn-guard
         if: steps.cache-cfn-guard.outputs.cache-hit != 'true'
         # This is partially duplicated in .devcontainer/Dockerfile, with the copy target being the only difference
