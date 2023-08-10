@@ -82,6 +82,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       CFN_LINT_VERSION: 0.79.5
+      CFN_GUARD_VERSION: 3.0.0
     defaults:
       run:
         working-directory: packages/aws-cloudformation/
@@ -110,11 +111,18 @@ jobs:
         run: |
           make lint
 
+      - name: Cache cfn-guard
+        id: cache-cfn-guard
+        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
+        with:
+          path: ~/.local/bin/cfn-guard
+          key: cfn-guard-v${{ env.CFN_GUARD_VERSION }}
       - name: Install cfn-guard
+        if: steps.cache-cfn-guard.outputs.cache-hit != 'true'
         # This is partially duplicated in .devcontainer/Dockerfile, with the copy target being the only difference
         run: |
           mkdir ./cfn-guard-temp/
-          wget https://github.com/aws-cloudformation/cloudformation-guard/releases/download/3.0.0/cfn-guard-v3-ubuntu-latest.tar.gz -O - | tar -xzvf - -C ./cfn-guard-temp/
+          wget https://github.com/aws-cloudformation/cloudformation-guard/releases/download/${{ env.CFN_GUARD_VERSION }}/cfn-guard-v3-ubuntu-latest.tar.gz -O - | tar -xzvf - -C ./cfn-guard-temp/
           cp ./cfn-guard-temp/cfn-guard-v3-ubuntu-latest/cfn-guard ~/.local/bin/
           rm -rf ./cfn-guard-temp/
 
