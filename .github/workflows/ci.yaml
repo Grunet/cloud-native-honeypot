@@ -28,6 +28,7 @@ jobs:
             /opt/pipx_bin/poetry
             ~/.local/bin/poetry
           key: poetry-v${{ env.POETRY_VERSION }}
+
       - name: Install poetry
         if: steps.cache-poetry.outputs.cache-hit != 'true'
         run: |
