@@ -26,7 +26,6 @@ jobs:
         with:
           path: ~/.local/pipx
           key: poetry-v${{ env.POETRY_VERSION }}
-
       - name: Install poetry
         if: steps.cache-poetry.outputs.cache-hit != 'true'
         run: |
