@@ -3,6 +3,8 @@ on: [push]
 jobs:
   honeypot:
     runs-on: ubuntu-22.04
+    env:
+      POETRY_VERSION: 1.5.1
     defaults:
       run:
         working-directory: packages/honeypot/
@@ -18,9 +20,17 @@ jobs:
           pipx --version
           pipx --version | grep "1.2.0"
 
+      - name: Cache Poetry
+        id: cache-poetry
+        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
+        with:
+          path: /opt/pipx_bin/poetry
+          key: poetry-v${{ env.POETRY_VERSION }}
       - name: Install poetry
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
         run: |
-          pipx install poetry==1.5.1
+          pipx install poetry==${{ env.POETRY_VERSION }}
+
       - uses: actions/setup-python@bd6b4b6205c4dbad673328db7b31b7fab9e241c0 # v4.6.1
         with:
           python-version: "3.11.4"
