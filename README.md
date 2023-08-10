@@ -2,7 +2,7 @@
 
 Honeypots made for a cloud native world.
 
-Only [low-interaction](https://www.rapid7.com/fundamentals/honeypots/#:~:text=Low%2Dinteraction%20honeypot) ones currently (but see [this issue](https://github.com/Grunet/cloud-native-honeypot/issues/58)).
+Only [low-interaction](https://www.rapid7.com/fundamentals/honeypots/#honeypotsbycomplexitynbsp) ones currently (but see [this issue](https://github.com/Grunet/cloud-native-honeypot/issues/58)).
 
 ## Quickstart
 
