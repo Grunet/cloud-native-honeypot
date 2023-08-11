@@ -90,7 +90,6 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: "pip"
-
       - name: Install cfn-lint
         run: |
           pip install cfn-lint=='0.79.5'
