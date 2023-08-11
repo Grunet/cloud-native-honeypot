@@ -10,6 +10,10 @@ It's best to only create the CreatePolicy and DeletePolicies ad hoc/as-needed (i
 
 That way there's no way to compromise them (since they won't exist).
 
+## Supply Chain Security
+
+Both cfn-lint and cfn-guard should be getting cached in CI.
+
 ## Tools in Place
 
 ### Security Static Analysis

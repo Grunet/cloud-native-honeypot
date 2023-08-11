@@ -48,6 +48,17 @@ The goals here are twofold
 
 On a monthly basis, I will check to see if any area is not hitting its target and attempt to rectify that
 
+#### pip (in .devcontainer/Dockerfile)
+
+The first step is to check if there is a new release available. This can be done as follows
+
+1. Run `apt-cache policy python3-pip`
+    - If the version is the same, nothing more needs to be done
+    - If there are, continue
+2. Update the version in `.devcontainer/Dockerfile`
+
+From there, update the changelog, and (potentially) bump the version and run the release workflow to publish the changes.
+
 #### cfn-lint
 
 The first step is to check if there is a new release available. This can be done as follows
