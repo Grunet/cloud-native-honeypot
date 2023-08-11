@@ -1,5 +1,9 @@
 name: CI
 on: [push]
+
+env:
+  PYTHON_VERSION: 3.11.4
+
 jobs:
   honeypot:
     runs-on: ubuntu-22.04
@@ -24,7 +28,7 @@ jobs:
 
       - uses: actions/setup-python@bd6b4b6205c4dbad673328db7b31b7fab9e241c0 # v4.6.1
         with:
-          python-version: "3.11.4"
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: "poetry"
 
       - run: |
@@ -80,6 +84,11 @@ jobs:
     steps:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
+      - name: Setup Python for cfn-lint install
+        uses: actions/setup-python@bd6b4b6205c4dbad673328db7b31b7fab9e241c0 # v4.6.1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
       - name: Check pip version
         # Make sure the version of pip doesn't unexpectedly change and doesn't drift much from what's used in Codespaces
         # If this change looks legitimate (i.e. Github updating the vendored version, or coming after a change to the runner OS version) update the hard-coded version below
