@@ -86,10 +86,17 @@ jobs:
 
       - name: Setup Python and Caching for cfn-lint Install
         uses: actions/setup-python@bd6b4b6205c4dbad673328db7b31b7fab9e241c0 # v4.6.1
-        # This should also be pinning the version of pip (based on the version of Python)
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: "pip"
+
+      - name: Check pip version
+        # Make sure the version of pip doesn't unexpectedly change (it's unclear if actions/setup-python pins it or not) and doesn't drift much from what's used in Codespaces
+        # If this change looks legitimate (i.e. actions/setup-python updating the vendored version) update the hard-coded version below
+        run: |
+          pip --version
+          pip --version | grep "23.2.1"
+
       - name: Install cfn-lint
         run: |
           pip install cfn-lint=='0.79.5'
