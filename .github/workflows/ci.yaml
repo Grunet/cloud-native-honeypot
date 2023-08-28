@@ -118,6 +118,7 @@ jobs:
         run: |
           mkdir ./cfn-guard-temp/
           wget https://github.com/aws-cloudformation/cloudformation-guard/releases/download/${{ env.CFN_GUARD_VERSION }}/cfn-guard-v3-ubuntu-latest.tar.gz -O - | tar -xzvf - -C ./cfn-guard-temp/
+          mkdir -p ~/.local/bin/
           cp ./cfn-guard-temp/cfn-guard-v3-ubuntu-latest/cfn-guard ~/.local/bin/
           rm -rf ./cfn-guard-temp/
 
