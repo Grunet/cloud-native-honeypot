@@ -2,7 +2,7 @@ name: CI
 on: [push]
 
 env:
-  PYTHON_VERSION: 3.11.4
+  PYTHON_VERSION: 3.11.5
 
 jobs:
   honeypot:
@@ -59,7 +59,7 @@ jobs:
         # If this change looks legitimate (i.e. Github updating the vendored version, or coming after a change to the runner OS version) update the hard-coded version below
         run: |
           docker --version
-          docker --version | grep "Docker version 23.0.6+azure-2"
+          docker --version | grep "Docker version 24.0.5"
 
       - name: Smoke Tests - Server Startup
         run: |
@@ -118,6 +118,7 @@ jobs:
         run: |
           mkdir ./cfn-guard-temp/
           wget https://github.com/aws-cloudformation/cloudformation-guard/releases/download/${{ env.CFN_GUARD_VERSION }}/cfn-guard-v3-ubuntu-latest.tar.gz -O - | tar -xzvf - -C ./cfn-guard-temp/
+          mkdir -p ~/.local/bin/
           cp ./cfn-guard-temp/cfn-guard-v3-ubuntu-latest/cfn-guard ~/.local/bin/
           rm -rf ./cfn-guard-temp/
 
