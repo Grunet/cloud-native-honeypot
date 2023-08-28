@@ -11,7 +11,7 @@
 	"features": {
 		// Copied from https://github.com/devcontainers/features/tree/main/src/docker-in-docker
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
-			"version": "23.0.6+azure-ubuntu22.04u2" // Found by running without a specified version, running docker --version and trying it, then seeing the creation log for that failure which should list the actual available versions
+			"version": "24.0.5+azure-ubuntu22.04u2" // Found by running without a specified version, running docker --version and trying it, then seeing the creation log for that failure which should list the actual available versions
 		}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

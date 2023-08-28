@@ -16,7 +16,9 @@ What is in scope for breaking changes includes
 ### v0.4.7
 
 - Update Chainguard base images in the Dockerfile, including an update to Python 3.11.5 from 3.11.4
+
 - Update version of Python in CI to 3.11.5 from 3.11.4
+- Update version of Docker locally and CI to 24.0.5 from 23.0.6
 
 ### v0.4.6
 
