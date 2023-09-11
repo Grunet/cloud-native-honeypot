@@ -10,6 +10,10 @@ What is in scope for breaking changes includes (but isn't necessarily limited to
 
 ## Changes
 
+### v0.2.4
+
+- Update honeypot container image from v0.4.7 to v0.4.8
+
 ### v0.2.3
 
 - Update honeypot container image from v0.4.6 to v0.4.7
