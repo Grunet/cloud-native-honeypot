@@ -13,6 +13,10 @@ What is in scope for breaking changes includes
 
 ## Changes
 
+### v0.4.8
+
+- Update Chainguard base images in the Dockerfile
+
 ### v0.4.7
 
 - Update Chainguard base images in the Dockerfile, including an update to Python 3.11.5 from 3.11.4
