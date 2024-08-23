@@ -95,7 +95,7 @@ jobs:
         # If this change looks legitimate (i.e. actions/setup-python updating the vendored version) update the hard-coded version below
         run: |
           pip --version
-          pip --version | grep "23.2.1"
+          pip --version | grep "24.2"
 
       - name: Install cfn-lint
         run: |
