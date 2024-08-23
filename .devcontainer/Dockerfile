@@ -13,7 +13,7 @@ RUN POETRY_VERSION=1.5.1 POETRY_HOME=/home/vscode/.local/ python poetryInstallSc
 
 # AWS Cloudformation
 
-RUN apt-get install -y python3-pip="22.0.2+dfsg-1ubuntu0.3"
+RUN apt-get install -y python3-pip="22.0.2+dfsg-1ubuntu0.4"
 RUN pip install cfn-lint=='0.79.5'
 
 # This is partially duplicated in ci.yaml, with the copy target being the only difference
