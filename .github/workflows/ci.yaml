@@ -181,7 +181,7 @@ jobs:
           mkdir ./trivy-temp/
           wget https://github.com/aquasecurity/trivy/releases/download/v${{ env.TRIVY_VERSION }}/trivy_${{ env.TRIVY_VERSION }}_Linux-64bit.tar.gz -O - | tar -xzvf - -C ./trivy-temp/
           mkdir -p ~/.local/bin/
-          cp ./trivy-temp/trivy /home/vscode/.local/bin/
+          cp ./trivy-temp/trivy ~/.local/bin/
           rm -rf ./trivy-temp/
 
       - name: Static Analysis - trivy
