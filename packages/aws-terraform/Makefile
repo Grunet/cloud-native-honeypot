@@ -1,3 +1,5 @@
+init:
+	terraform init
 check-format:
 	terraform fmt --check
 format:

@@ -155,6 +155,10 @@ jobs:
           cp ./terraform-temp/terraform ~/.local/bin/
           rm -rf ./terraform-temp/
 
+      - name: Init terraform
+        run: |
+          make init
+
       - name: Check Formatting
         run: |
           make check-format
