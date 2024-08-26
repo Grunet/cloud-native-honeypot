@@ -29,3 +29,8 @@ RUN wget https://releases.hashicorp.com/terraform/1.9.5/terraform_1.9.5_linux_am
 RUN unzip ./terraform-temp/terraform.zip -d ./terraform-temp/
 RUN mv ./terraform-temp/terraform /home/vscode/.local/bin/
 RUN rm -rf ./terraform-temp/
+
+RUN mkdir ./trivy-temp/
+RUN wget https://github.com/aquasecurity/trivy/releases/download/v0.54.1/trivy_0.54.1_Linux-64bit.tar.gz -O - | tar -xzvf - -C ./trivy-temp/
+RUN cp ./trivy-temp/trivy /home/vscode/.local/bin/
+RUN rm -rf ./trivy-temp/

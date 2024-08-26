@@ -29,7 +29,9 @@
 				"tamasfe.even-better-toml",
 				"redhat.vscode-yaml",
 				"kddejong.vscode-cfn-lint",
-				"dannysteenman.cloudformation-yaml-snippets"
+				"dannysteenman.cloudformation-yaml-snippets",
+				"hashicorp.terraform",
+				"aquasecurityofficial.trivy-vulnerability-scanner"
 			],
 			"settings": {
 				"editor.formatOnSave": true,
