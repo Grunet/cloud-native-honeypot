@@ -21,3 +21,11 @@ RUN mkdir ./cfn-guard-temp/
 RUN wget https://github.com/aws-cloudformation/cloudformation-guard/releases/download/3.0.0/cfn-guard-v3-ubuntu-latest.tar.gz -O - | tar -xzvf - -C ./cfn-guard-temp/
 RUN cp ./cfn-guard-temp/cfn-guard-v3-ubuntu-latest/cfn-guard /home/vscode/.local/bin/
 RUN rm -rf ./cfn-guard-temp/
+
+# Terraform
+
+RUN mkdir ./terraform-temp/
+RUN wget https://releases.hashicorp.com/terraform/1.9.5/terraform_1.9.5_linux_amd64.zip -O ./terraform-temp/terraform.zip
+RUN unzip ./terraform-temp/terraform.zip -d ./terraform-temp/
+RUN mv ./terraform-temp/terraform /home/vscode/.local/bin/
+RUN rm -rf ./terraform-temp/
