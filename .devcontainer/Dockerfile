@@ -24,12 +24,14 @@ RUN rm -rf ./cfn-guard-temp/
 
 # Terraform
 
+# This is partially duplicated in ci.yaml, with the copy target being the only difference
 RUN mkdir ./terraform-temp/
 RUN wget https://releases.hashicorp.com/terraform/1.9.5/terraform_1.9.5_linux_amd64.zip -O ./terraform-temp/terraform.zip
 RUN unzip ./terraform-temp/terraform.zip -d ./terraform-temp/
-RUN mv ./terraform-temp/terraform /home/vscode/.local/bin/
+RUN cp ./terraform-temp/terraform /home/vscode/.local/bin/
 RUN rm -rf ./terraform-temp/
 
+# This is partially duplicated in ci.yaml, with the copy target being the only difference
 RUN mkdir ./trivy-temp/
 RUN wget https://github.com/aquasecurity/trivy/releases/download/v0.54.1/trivy_0.54.1_Linux-64bit.tar.gz -O - | tar -xzvf - -C ./trivy-temp/
 RUN cp ./trivy-temp/trivy /home/vscode/.local/bin/

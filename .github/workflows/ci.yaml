@@ -125,3 +125,61 @@ jobs:
       - name: Static Analysis - guard
         run: |
           make static-analysis-guard
+
+  aws-terraform:
+    runs-on: ubuntu-22.04
+    env:
+      TERRAFORM_VERSION: 1.9.5
+      TRIVY_VERSION: 0.54.1
+    defaults:
+      run:
+        working-directory: packages/aws-terraform/
+    steps:
+      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Cache terraform
+        id: cache-terraform
+        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
+        with:
+          path: ~/.local/bin/terraform
+          key: cfn-terraform-v${{ env.TERRAFORM_VERSION }}
+
+      - name: Install terraform
+        if: steps.cache-terraform.outputs.cache-hit != 'true'
+        # This is partially duplicated in .devcontainer/Dockerfile, with the copy target being the only difference
+        run: |
+          mkdir ./terraform-temp/
+          wget https://releases.hashicorp.com/terraform/${{ env.TERRAFORM_VERSION }}/terraform_${{ env.TERRAFORM_VERSION }}_linux_amd64.zip -O ./terraform-temp/terraform.zip
+          unzip ./terraform-temp/terraform.zip -d ./terraform-temp/
+          mkdir -p ~/.local/bin/
+          cp ./terraform-temp/terraform ~/.local/bin/
+          rm -rf ./terraform-temp/
+
+      - name: Check Formatting
+        run: |
+          make check-format
+
+      - name: Lint
+        run: |
+          make lint
+
+      - name: Cache trivy
+        id: cache-trivy
+        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
+        with:
+          path: ~/.local/bin/trivy
+          key: cfn-trivy-v${{ env.TRIVY_VERSION }}
+
+      - name: Install trivy
+        if: steps.cache-trivy.outputs.cache-hit != 'true'
+        # This is partially duplicated in .devcontainer/Dockerfile, with the copy target being the only difference
+        run: |
+          mkdir ./trivy-temp/
+          wget https://github.com/aquasecurity/trivy/releases/download/v${{ TRIVY_VERSION }}/trivy_${{ TRIVY_VERSION }}_Linux-64bit.tar.gz -O - | tar -xzvf - -C ./trivy-temp/
+          mkdir -p ~/.local/bin/
+          cp ./trivy-temp/trivy /home/vscode/.local/bin/
+          rm -rf ./trivy-temp/
+
+      - name: Static Analysis - trivy
+        run: |
+          make static-analysis-trivy
