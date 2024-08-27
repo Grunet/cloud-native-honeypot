@@ -18,3 +18,25 @@ resource "aws_ecs_cluster" "cluster" {
     cloud-native-honeypot = true
   }
 }
+
+resource "aws_ecs_service" "service" {
+  name = "service-${random_uuid.unique_suffix.result}"
+
+  cluster                 = var.cluster_name_or_arn != "" ? var.cluster_name_or_arn : aws_ecs_cluster.cluster.name
+  desired_count           = 1
+  enable_ecs_managed_tags = true
+  launch_type             = "FARGATE"
+  network_configuration {
+    assign_public_ip = false
+    # TODO - need to fill these references out
+    # subnets = []
+    # security_groups = []
+  }
+  platform_version = "1.4.0"
+  propagate_tags   = "SERVICE"
+  tags = {
+    cloud-native-honeypot = true
+  }
+  # TODO - need to fill this reference out
+  # task_definition = ""
+}
