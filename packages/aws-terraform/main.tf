@@ -1,3 +1,12 @@
+variable "vpc_id" {
+  type        = string
+  description = "The VPC to place the honeypot service in"
+}
+
+variable "subnet_id" {
+  type        = string
+  description = "The subnet to place the honeypot service in"
+}
 
 variable "cluster_name_or_arn" {
   type        = string
@@ -28,9 +37,8 @@ resource "aws_ecs_service" "service" {
   launch_type             = "FARGATE"
   network_configuration {
     assign_public_ip = false
-    # TODO - need to fill these references out
-    # subnets = []
-    # security_groups = []
+    subnets          = [var.subnet_id]
+    security_groups  = [aws_security_group.sg_ingress_full_access]
   }
   platform_version = "1.4.0"
   propagate_tags   = "SERVICE"
@@ -39,4 +47,20 @@ resource "aws_ecs_service" "service" {
   }
   # TODO - need to fill this reference out
   # task_definition = ""
+}
+
+resource "aws_security_group" "sg_ingress_full_access" {
+  description = "Allows all ingress traffic from within the VPC"
+  ingress = [
+    {
+      cidr_blocks = ["0.0.0.0/0"]
+      protocol    = -1
+      from_port   = 0
+      to_port     = 0
+    }
+  ]
+  tags = {
+    cloud-native-honeypot = true
+  }
+  vpc_id = var.vpc_id
 }
